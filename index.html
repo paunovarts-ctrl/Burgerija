@@ -393,11 +393,17 @@
   .slot{border:1px solid var(--line);background:var(--bg);padding:12px 8px;text-align:center;cursor:pointer;transition:transform .25s var(--ease),border-color .25s,background .25s;user-select:none}
   .slot .t{font-family:var(--display);font-size:18px}
   .slot .s{font-size:10.5px;letter-spacing:.04em;color:var(--dim);margin-top:4px}
-  .slot:not(.full):hover{border-color:var(--ember);transform:translateY(-3px)}
+  .slot:not(:disabled):hover{border-color:var(--ember);transform:translateY(-3px)}
   .slot.sel{background:var(--ember);border-color:var(--ember);color:#fff}
   .slot.sel .s{color:rgba(255,255,255,.85)}
-  .slot.full{opacity:.4;cursor:not-allowed;background:repeating-linear-gradient(45deg,var(--bg),var(--bg) 6px,rgba(226,73,31,.06) 6px,rgba(226,73,31,.06) 12px)}
-  .slot.full .s{color:var(--coral)}
+  .slot{font:inherit;color:inherit}
+  .slot:disabled{opacity:.3;cursor:not-allowed}
+  .slot:focus-visible{outline:2px solid var(--ember);outline-offset:2px}
+  .opt{font-size:10px;letter-spacing:.1em;color:var(--dim);text-transform:none}
+  .field input[aria-invalid="true"]{border-color:#ff7a45}
+  .hp{position:absolute;left:-9999px;width:1px;height:1px;overflow:hidden}
+  .btn[aria-busy="true"]{pointer-events:none;opacity:.75}
+  .btn[aria-busy="true"] span::after{content:"";display:inline-block;width:12px;height:12px;margin-left:10px;border:1.5px solid currentColor;border-right-color:transparent;border-radius:50%;vertical-align:-1px;animation:turn .8s linear infinite}
   .res-msg{font-size:13.5px;color:var(--dim);margin:6px 0 18px;min-height:18px}
   .res-msg.warn{color:#ff8a5c}
   .res-msg.ok{color:var(--gold)}
@@ -660,31 +666,35 @@
       <p class="lede" data-i18n="res.lede">Pick a date and party size, and we'll show you the open seatings.</p>
     </div>
 
-    <div class="res-card reveal d1" id="resForm">
+    <form class="res-card reveal d1" id="resForm" novalidate>
       <div class="res-row">
-        <div class="field"><label for="rDate" data-i18n="res.date">Date</label><input type="date" id="rDate"></div>
+        <div class="field"><label for="rDate" data-i18n="res.date">Date</label><input type="date" id="rDate" required></div>
         <div class="field"><label for="rParty" data-i18n="res.guests">Guests</label>
           <select id="rParty"></select>
         </div>
       </div>
 
       <div class="slots-head">
-        <span class="h" data-i18n="res.slots">Available seatings</span>
-        <span class="legend" data-i18n="res.legend">Seats left shown per slot. Striped means full.</span>
+        <span class="h" id="rSlotsLbl" data-i18n="res.slots">Pick a time</span>
+        <span class="legend"><span data-i18n="res.big">More than 10 guests? Call us.</span></span>
       </div>
-      <div class="slots" id="rSlots"></div>
-      <div class="res-msg" id="rMsg">Choose a date to see availability.</div>
+      <div class="slots" id="rSlots" role="radiogroup" aria-labelledby="rSlotsLbl"></div>
+      <div class="res-msg" id="rMsg" aria-live="polite"></div>
 
       <div class="res-row">
-        <div class="field"><label for="rName" data-i18n="res.name">Name</label><input type="text" id="rName" data-i18n-ph="res.namePh" placeholder="Your name" autocomplete="name"></div>
-        <div class="field"><label for="rPhone" data-i18n="res.phone">Phone</label><input type="tel" id="rPhone" placeholder="+385 ..." autocomplete="tel"></div>
+        <div class="field"><label for="rName" data-i18n="res.name">Name</label><input type="text" id="rName" data-i18n-ph="res.namePh" placeholder="Your name" autocomplete="name" maxlength="80" required></div>
+        <div class="field"><label for="rPhone" data-i18n="res.phone">Phone</label><input type="tel" id="rPhone" placeholder="+385 ..." autocomplete="tel" maxlength="32" required></div>
       </div>
-      <div class="field"><label for="rEmail" data-i18n="res.email">Email</label><input type="email" id="rEmail" placeholder="you@email.com" autocomplete="email"></div>
+      <div class="res-row">
+        <div class="field"><label for="rEmail"><span data-i18n="res.email">Email</span> <small class="opt" data-i18n="res.optional">(optional)</small></label><input type="email" id="rEmail" placeholder="you@email.com" autocomplete="email" maxlength="120"></div>
+        <div class="field"><label for="rNote"><span data-i18n="res.noteLbl">Anything we should know?</span> <small class="opt" data-i18n="res.optional">(optional)</small></label><input type="text" id="rNote" data-i18n-ph="res.notePh" placeholder="Allergies, a high chair, a birthday..." maxlength="400"></div>
+      </div>
+      <div class="hp" aria-hidden="true"><label for="rWebsite">Website</label><input type="text" id="rWebsite" tabindex="-1" autocomplete="off"></div>
 
-      <div class="res-actions"><button type="button" class="btn" id="rConfirm"><span data-i18n="res.confirm">Confirm reservation</span></button></div>
+      <div class="res-actions"><button type="submit" class="btn" id="rConfirm"><span data-i18n="res.confirm">Send request</span></button></div>
 
-      <p class="res-note"><span data-i18n="res.note">During our season we confirm by phone. Or call us directly at</span> <a href="tel:+385955149703" style="color:var(--ember)">+385 95 514 9703</a>.<br><b style="color:var(--dim)">Developer note:</b> bookings are stored locally as a demo. Connect <code>submitReservation()</code> to your backend, email, or a booking provider to take live reservations.</p>
-    </div>
+      <p class="res-note"><span data-i18n="res.note">Prefer to talk? Call us at</span> <a href="tel:+385955149703" style="color:var(--ember)">+385 95 514 9703</a>.</p>
+    </form>
   </div>
 </section>
 
@@ -796,32 +806,36 @@
     'rev.read':['Read the reviews on {src}','Bewertungen auf {src} lesen','Pročitajte recenzije na {src}','Leggi le recensioni su {src}'],
     'res.badge':['Book a Table','Tisch reservieren','Rezervacija','Prenota un tavolo'],
     'res.h2':['Reserve your seafront table','Reservieren Sie Ihren Tisch am Meer','Rezervirajte stol uz more','Prenota il tuo tavolo sul mare'],
-    'res.lede':["Pick a date and party size, and we'll show you the open seatings.",'Wählen Sie Datum und Personenzahl, wir zeigen Ihnen die freien Zeiten.','Odaberite datum i broj osoba, a mi ćemo vam pokazati slobodne termine.','Scegli data e numero di persone e ti mostriamo gli orari liberi.'],
+    'res.lede':["Pick a date, a time and your party size. We'll confirm your table by phone or message.","Wählen Sie Datum, Uhrzeit und Personenzahl. Wir bestätigen Ihren Tisch per Telefon oder Nachricht.","Odaberite datum, vrijeme i broj osoba. Stol ćemo potvrditi telefonom ili porukom.","Scegli data, ora e numero di persone. Ti confermiamo il tavolo per telefono o messaggio."],
     'res.date':['Date','Datum','Datum','Data'],
     'res.guests':['Guests','Gäste','Gosti','Ospiti'],
-    'res.slots':['Available seatings','Freie Zeiten','Slobodni termini','Orari disponibili'],
-    'res.legend':['Seats left shown per slot. Striped means full.','Freie Plätze pro Zeitfenster. Schraffiert heißt ausgebucht.','Prikazana su slobodna mjesta po terminu. Prugasto znači popunjeno.','Posti liberi per fascia oraria. A righe significa pieno.'],
+    'res.slots':["Pick a time","Uhrzeit wählen","Odaberite vrijeme","Scegli l'orario"],
     'res.name':['Name','Name','Ime','Nome'],
     'res.namePh':['Your name','Ihr Name','Vaše ime','Il tuo nome'],
     'res.phone':['Phone','Telefon','Telefon','Telefono'],
     'res.email':['Email','E-Mail','E-pošta','Email'],
-    'res.confirm':['Confirm reservation','Reservierung bestätigen','Potvrdi rezervaciju','Conferma prenotazione'],
-    'res.note':['During our season we confirm by phone. Or call us directly at','Während der Saison bestätigen wir telefonisch. Oder rufen Sie uns direkt an:','Tijekom sezone potvrđujemo telefonom. Ili nas nazovite izravno na','Durante la stagione confermiamo per telefono. Oppure chiamaci direttamente al'],
+    'res.confirm':["Send request","Anfrage senden","Pošalji upit","Invia richiesta"],
+    'res.note':["Prefer to talk? Call us at","Lieber telefonieren? Rufen Sie uns an:","Radije biste razgovarali? Nazovite nas na","Preferisci parlare? Chiamaci al"],
     'res.chooseDate':['Choose a date to see availability.','Wählen Sie ein Datum, um freie Zeiten zu sehen.','Odaberite datum za prikaz slobodnih termina.','Scegli una data per vedere la disponibilità.'],
-    'res.seats':['{n} seats','{n} Plätze','{n} mjesta','{n} posti'],
-    'res.closed':['closed','vorbei','zatvoreno','chiuso'],
-    'res.selected':['Selected {time} for {party} on {date}. Add your details and confirm.','{time} für {party} am {date} gewählt. Geben Sie Ihre Daten ein und bestätigen Sie.','Odabrano: {time}, {party}, {date}. Unesite podatke i potvrdite.','Selezionato {time} per {party} il {date}. Inserisci i tuoi dati e conferma.'],
-    'res.tap':['Tap an available seating for {party}.','Wählen Sie eine freie Zeit für {party}.','Odaberite slobodan termin za {party}.','Scegli un orario libero per {party}.'],
-    'res.nofit':['No seatings fit {party} that day. Try another date or a smaller party.','An diesem Tag gibt es keinen Platz für {party}. Versuchen Sie ein anderes Datum oder weniger Personen.','Taj dan nema mjesta za {party}. Probajte drugi datum ili manju grupu.',"Nessun orario disponibile per {party} quel giorno. Prova un'altra data o un gruppo più piccolo."],
-    'res.pickFirst':['Please pick an available seating first.','Bitte wählen Sie zuerst eine freie Zeit.','Najprije odaberite slobodan termin.','Scegli prima un orario disponibile.'],
-    'res.needNP':['Please add your name and phone so we can confirm.','Bitte geben Sie Name und Telefonnummer an, damit wir bestätigen können.','Upišite ime i telefon kako bismo mogli potvrditi.','Inserisci nome e telefono per permetterci di confermare.'],
+    'res.selected':["{time} for {party} on {date}. Add your details and send.","{time} für {party} am {date}. Geben Sie Ihre Daten ein und senden Sie ab.","{time}, {party}, {date}. Unesite podatke i pošaljite.","{time} per {party} il {date}. Inserisci i tuoi dati e invia."],
+    'res.tap':["Pick a time for {party}.","Wählen Sie eine Uhrzeit für {party}.","Odaberite vrijeme za {party}.","Scegli un orario per {party}."],
+    'res.pickFirst':["Please pick a time first.","Bitte wählen Sie zuerst eine Uhrzeit.","Najprije odaberite vrijeme.","Scegli prima un orario."],
+    'res.needNP':["Please add your name and phone number so we can confirm.","Bitte geben Sie Name und Telefonnummer an, damit wir bestätigen können.","Upišite ime i broj telefona kako bismo mogli potvrditi.","Inserisci nome e numero di telefono per permetterci di confermare."],
     'res.badEmail':['That email address looks incomplete. Check it or leave it empty.','Die E-Mail-Adresse scheint unvollständig. Prüfen Sie sie oder lassen Sie das Feld leer.','E-mail adresa izgleda nepotpuno. Provjerite je ili ostavite polje prazno.',"L'indirizzo email sembra incompleto. Controllalo o lascialo vuoto."],
-    'res.filled':['Sorry, that seating just filled up. Please choose another.','Diese Zeit ist leider gerade ausgebucht. Bitte wählen Sie eine andere.','Nažalost, taj termin se upravo popunio. Odaberite drugi.',"Purtroppo quell'orario si è appena riempito. Scegline un altro."],
-    'res.okH':['Table requested','Tisch angefragt','Stol zatražen','Tavolo richiesto'],
-    'res.okThanks':['Thanks, {name}. Your seating is held.','Danke, {name}. Ihr Platz ist vorgemerkt.','Hvala, {name}. Vaš termin je zadržan.','Grazie, {name}. Il tuo tavolo è riservato.'],
+    'res.okH':["Request sent","Anfrage gesendet","Upit poslan","Richiesta inviata"],
+    'res.okThanks':["Thanks, {name}. Your request is on our phone, and we'll confirm by call or message shortly.","Danke, {name}. Ihre Anfrage ist bei uns angekommen, wir bestätigen in Kürze per Anruf oder Nachricht.","Hvala, {name}. Vaš upit je stigao do nas i uskoro ćemo ga potvrditi pozivom ili porukom.","Grazie, {name}. La tua richiesta ci è arrivata e ti confermiamo a breve con una chiamata o un messaggio."],
     'res.okTime':['Time','Uhrzeit','Vrijeme','Ora'],
     'res.okContact':['Contact','Kontakt','Kontakt','Contatto'],
-    'res.okNote':["We'll confirm by phone during our seasonal hours. Need to change it? Call",'Wir bestätigen telefonisch während der Saison. Etwas ändern? Rufen Sie an:','Potvrdit ćemo telefonom tijekom sezone. Trebate promjenu? Nazovite','Confermeremo per telefono durante la stagione. Vuoi modificarla? Chiama il'],
+    'res.okNote':["Need to change something? Call","Etwas ändern? Rufen Sie an:","Trebate nešto promijeniti? Nazovite","Vuoi cambiare qualcosa? Chiama il"],
+    'res.big':["More than 10 guests? Call us.","Mehr als 10 Personen? Rufen Sie uns an.","Više od 10 osoba? Nazovite nas.","Più di 10 persone? Chiamaci."],
+    'res.optional':["(optional)","(optional)","(neobavezno)","(facoltativo)"],
+    'res.noteLbl':["Anything we should know?","Sollen wir etwas wissen?","Nešto što bismo trebali znati?","Qualcosa che dovremmo sapere?"],
+    'res.notePh':["Allergies, a high chair, a birthday...","Allergien, Kinderstuhl, Geburtstag...","Alergije, dječja stolica, rođendan...","Allergie, seggiolone, un compleanno..."],
+    'res.doneToday':["We're done taking tables for today. Pick another date.","Für heute nehmen wir keine Tische mehr an. Bitte wählen Sie ein anderes Datum.","Za danas više ne primamo rezervacije. Odaberite drugi datum.","Per oggi non accettiamo più prenotazioni. Scegli un altro giorno."],
+    'res.badPhone':["That phone number looks too short. Include the country code, e.g. +49...","Die Telefonnummer scheint zu kurz. Bitte mit Ländervorwahl, z. B. +49...","Broj telefona je prekratak. Upišite ga s pozivnim brojem, npr. +385...","Il numero sembra troppo corto. Aggiungi il prefisso, es. +39..."],
+    'res.sending':["Sending...","Wird gesendet...","Šaljem...","Invio in corso..."],
+    'res.fail':["We couldn't send your request. Please try again, or call us at +385 95 514 9703.","Ihre Anfrage konnte nicht gesendet werden. Bitte versuchen Sie es erneut oder rufen Sie uns an: +385 95 514 9703.","Upit nije poslan. Pokušajte ponovno ili nas nazovite na +385 95 514 9703.","Non siamo riusciti a inviare la richiesta. Riprova o chiamaci al +385 95 514 9703."],
+    'res.again':["Book another table","Weiteren Tisch anfragen","Rezerviraj još jedan stol","Prenota un altro tavolo"],
     'visit.badge':['Find Us','So finden Sie uns','Pronađite nas','Dove trovarci'],
     'visit.h2':['Come find us in Poreč','Besuchen Sie uns in Poreč','Posjetite nas u Poreču','Vieni a trovarci a Parenzo'],
     'visit.address':['Address','Adresse','Adresa','Indirizzo'],
@@ -1344,104 +1358,114 @@
     go(0,false);
   })();
 
-  // ================= RESERVATION (client-side demo availability) =================
+  // ================= RESERVATION: request form -> /api/reserve -> ntfy push =================
   (function(){
-    const SEATS_PER_SLOT = 20;
-    const OPEN_HOUR = 12, LAST_SEATING = 22;
-    const dateEl=document.getElementById('rDate'),
-          partyEl=document.getElementById('rParty'),
-          slotsEl=document.getElementById('rSlots'),
-          msgEl=document.getElementById('rMsg'),
-          confirmBtn=document.getElementById('rConfirm');
-    let selected=null, msg={key:null,vars:null,cls:''};
+    const OPEN_HOUR=12, LAST_HOUR=22, MAX_GUESTS=10;
+    const form=document.getElementById('resForm'),
+          dateEl=document.getElementById('rDate'), partyEl=document.getElementById('rParty'),
+          slotsEl=document.getElementById('rSlots'), msgEl=document.getElementById('rMsg'),
+          nameEl=document.getElementById('rName'), phoneEl=document.getElementById('rPhone'),
+          emailEl=document.getElementById('rEmail'), noteEl=document.getElementById('rNote'),
+          hpEl=document.getElementById('rWebsite'), btn=document.getElementById('rConfirm');
+    const shownAt=Date.now();
+    let time=null, done=false;
 
-    const today=new Date(); const iso=d=>d.toISOString().slice(0,10);
-    const max=new Date(today); max.setDate(max.getDate()+60);
-    dateEl.min=iso(today); dateEl.max=iso(max); dateEl.value=iso(today);
-    const fmtDate=(s,opts)=>new Date(s+'T00:00:00').toLocaleDateString(LOCALE[lang],opts);
+    const pad=n=>String(n).padStart(2,'0');
+    const isoLocal=d=>d.getFullYear()+'-'+pad(d.getMonth()+1)+'-'+pad(d.getDate());
+    const today=new Date(), max=new Date(today); max.setDate(max.getDate()+90);
+    dateEl.min=isoLocal(today); dateEl.max=isoLocal(max); dateEl.value=isoLocal(today);
+    const fmtDate=(s,opts)=>new Date(s+'T12:00:00').toLocaleDateString(LOCALE[lang],opts);
 
-    function say(key,vars,cls){ msg={key,vars,cls:cls||''}; msgEl.className='res-msg'+(cls?' '+cls:''); msgEl.textContent=t(key,vars); }
+    let msg=null;
+    function say(key,vars,cls){ msg={key,vars,cls}; msgEl.className='res-msg'+(cls?' '+cls:''); msgEl.textContent=key?t(key,vars):''; }
     function partyOptions(){
       const v=partyEl.value||'2';
-      partyEl.innerHTML=Array.from({length:10},(_,k)=>'<option value="'+(k+1)+'">'+guests(k+1)+'</option>').join('');
+      partyEl.innerHTML=Array.from({length:MAX_GUESTS},(_,k)=>'<option value="'+(k+1)+'">'+guests(k+1)+'</option>').join('');
       partyEl.value=v;
     }
-
-    function hash(str){let h=2166136261;for(let i=0;i<str.length;i++){h^=str.charCodeAt(i);h=Math.imul(h,16777619)}return (h>>>0)}
-    function rng(seed){return function(){seed=Math.imul(seed^(seed>>>15),seed|1);seed^=seed+Math.imul(seed^(seed>>>7),seed|61);return ((seed^(seed>>>14))>>>0)/4294967296}}
-    function localBookings(){try{return JSON.parse(localStorage.getItem('burgerija_bookings')||'[]')}catch(e){return []}}
-    function saveBooking(b){try{const a=localBookings();a.push(b);localStorage.setItem('burgerija_bookings',JSON.stringify(a))}catch(e){}}
-
-    function seatsTaken(dateStr,time){
-      const d=new Date(dateStr+'T00:00:00'); const dow=d.getDay();
-      const hr=parseInt(time);
-      const weekend=(dow===5||dow===6)?1.25:1;
-      const peak=(hr>=19&&hr<=21)?1.35:(hr>=13&&hr<=14?1.1:0.7);
-      const r=rng(hash(dateStr+time));
-      let base=SEATS_PER_SLOT*0.55*weekend*peak*(0.6+r()*0.6);
-      base=Math.min(SEATS_PER_SLOT,Math.round(base));
-      localBookings().forEach(b=>{if(b.date===dateStr&&b.time===time)base+=b.party});
-      return Math.min(SEATS_PER_SLOT,base);
+    function hint(){
+      const party=+partyEl.value;
+      if(time) say('res.selected',{time,party:guests(party),date:fmtDate(dateEl.value,{weekday:'long',day:'numeric',month:'long'})},'ok');
+      else if(!slotsEl.querySelector('.slot:not(:disabled)')) say('res.doneToday',null,'warn');
+      else say('res.tap',{party:guests(party)});
     }
-
-    function render(){
-      const keep=selected; selected=null;
-      const dateStr=dateEl.value, party=parseInt(partyEl.value);
+    function renderSlots(){
+      const d=dateEl.value, isToday=d===isoLocal(new Date()), now=new Date();
+      const soonest=now.getHours()*60+now.getMinutes()+45;   // at least 45 minutes' notice
       slotsEl.innerHTML='';
-      if(!dateStr){say('res.chooseDate');return}
-      const isToday=dateStr===iso(today); const now=new Date();
-      let anyOpen=false;
-      for(let h=OPEN_HOUR;h<=LAST_SEATING;h++){
+      for(let hr=OPEN_HOUR;hr<=LAST_HOUR;hr++){
         for(const m of [0,30]){
-          if(h===LAST_SEATING&&m===30)continue;
-          const time=String(h).padStart(2,'0')+':'+String(m).padStart(2,'0');
-          const past=isToday&&(h<now.getHours()||(h===now.getHours()&&m<=now.getMinutes()));
-          const left=Math.max(0,SEATS_PER_SLOT-seatsTaken(dateStr,time));
-          const full=past||left<party;
-          if(!full)anyOpen=true;
-          const el=document.createElement('div');
-          el.className='slot'+(full?' full':'');
-          el.innerHTML='<div class="t">'+time+'</div><div class="s">'+(past?t('res.closed'):t('res.seats',{n:left}))+'</div>';
-          const pick=()=>{slotsEl.querySelectorAll('.slot').forEach(s=>s.classList.remove('sel'));el.classList.add('sel');selected={date:dateStr,time:time,party:party};say('res.selected',{time,party:guests(party),date:fmtDate(dateStr,{weekday:'long',day:'numeric',month:'long'})},'ok')};
-          if(!full){ el.onclick=pick; if(keep&&keep.date===dateStr&&keep.time===time&&keep.party===party) pick(); }
-          slotsEl.appendChild(el);
+          if(hr===LAST_HOUR&&m===30) continue;
+          const tm=pad(hr)+':'+pad(m);
+          const b=document.createElement('button');
+          b.type='button'; b.className='slot'; b.setAttribute('role','radio');
+          b.innerHTML='<span class="t">'+tm+'</span>';
+          b.disabled=isToday && hr*60+m<soonest;
+          b.setAttribute('aria-checked',String(tm===time && !b.disabled));
+          if(tm===time && !b.disabled) b.classList.add('sel');
+          b.addEventListener('click',()=>{
+            time=tm;
+            slotsEl.querySelectorAll('.slot').forEach(x=>{ x.classList.toggle('sel',x===b); x.setAttribute('aria-checked',String(x===b)); });
+            hint();
+          });
+          slotsEl.appendChild(b);
         }
       }
-      if(!selected){ if(anyOpen) say('res.tap',{party:guests(party)}); else say('res.nofit',{party:guests(party)},'warn'); }
+      if(time && !slotsEl.querySelector('.slot.sel')) time=null;
+      hint();
     }
 
-    function submitReservation(b){
-      // >>> INTEGRATION POINT: send `b` to your backend / email / booking API here <<<
-      saveBooking(b);
-      return true;
+    function setBusy(on){
+      btn.setAttribute('aria-busy',String(on));
+      btn.querySelector('span').textContent=on?t('res.sending'):t('res.confirm');
     }
+    form.addEventListener('submit',async e=>{
+      e.preventDefault();
+      [nameEl,phoneEl,emailEl].forEach(x=>x.removeAttribute('aria-invalid'));
+      const name=nameEl.value.trim(), phone=phoneEl.value.trim(), email=emailEl.value.trim(), note=noteEl.value.trim();
+      if(!time){ say('res.pickFirst',null,'warn'); slotsEl.querySelector('.slot:not(:disabled)')?.focus(); return; }
+      if(!name||!phone){ say('res.needNP',null,'warn'); (name?phoneEl:nameEl).setAttribute('aria-invalid','true'); (name?phoneEl:nameEl).focus(); return; }
+      if((phone.match(/\d/g)||[]).length<6){ say('res.badPhone',null,'warn'); phoneEl.setAttribute('aria-invalid','true'); phoneEl.focus(); return; }
+      if(email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)){ say('res.badEmail',null,'warn'); emailEl.setAttribute('aria-invalid','true'); emailEl.focus(); return; }
 
-    confirmBtn.onclick=()=>{
-      const name=document.getElementById('rName').value.trim();
-      const phone=document.getElementById('rPhone').value.trim();
-      const email=document.getElementById('rEmail').value.trim();
-      if(!selected){say('res.pickFirst',null,'warn');return}
-      if(!name||!phone){say('res.needNP',null,'warn');return}
-      if(email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)){say('res.badEmail',null,'warn');return}
-      const left=Math.max(0,SEATS_PER_SLOT-seatsTaken(selected.date,selected.time));
-      if(left<selected.party){say('res.filled',null,'warn');render();return}
-      const booking={...selected,name,phone,email,lang,placed:new Date().toISOString()};
-      submitReservation(booking);
-      const d=fmtDate(selected.date,{weekday:'long',day:'numeric',month:'long',year:'numeric'});
-      const esc=s=>s.replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
-      document.getElementById('resForm').innerHTML=
+      const booking={date:dateEl.value,time,party:+partyEl.value,name,phone,email,note,lang,website:hpEl.value,elapsed:Date.now()-shownAt};
+      setBusy(true); say(null);
+      try{
+        const r=await fetch('/api/reserve',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(booking)});
+        const j=await r.json().catch(()=>({}));
+        if(!r.ok||!j.ok) throw new Error(j.error||r.status);
+        success(booking);
+      }catch(err){
+        setBusy(false); say('res.fail',null,'warn');
+      }
+    });
+
+    const esc=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+    let last=null;
+    function success(b){
+      done=true; last=b;
+      const d=fmtDate(b.date,{weekday:'long',day:'numeric',month:'long',year:'numeric'});
+      form.innerHTML=
         '<div class="res-success"><div class="tick">✓</div>'+
         '<h3>'+t('res.okH')+'</h3>'+
-        '<p class="lede" style="margin-inline:auto">'+t('res.okThanks',{name:esc(name.split(' ')[0])})+'</p>'+
-        '<div class="det">'+t('res.date')+': <span>'+d+'</span><br>'+t('res.okTime')+': <span>'+selected.time+'</span><br>'+t('res.guests')+': <span>'+selected.party+'</span><br>'+t('res.okContact')+': <span>'+esc(phone)+'</span></div>'+
+        '<p class="lede" style="margin-inline:auto">'+t('res.okThanks',{name:esc(b.name.split(' ')[0])})+'</p>'+
+        '<div class="det">'+t('res.date')+': <span>'+d+'</span><br>'+t('res.okTime')+': <span>'+b.time+'</span><br>'+t('res.guests')+': <span>'+b.party+'</span><br>'+t('res.okContact')+': <span>'+esc(b.phone)+'</span></div>'+
         '<p class="res-note" style="border:0">'+t('res.okNote')+' <a href="tel:+385955149703" style="color:var(--ember)">+385 95 514 9703</a>.</p>'+
         '</div>';
-    };
+      form.querySelector('.res-success').focus?.();
+    }
 
-    dateEl.addEventListener('change',render);
-    partyEl.addEventListener('change',render);
-    langHooks.push(()=>{ if(document.body.contains(partyEl)){ partyOptions(); render(); } });
-    partyOptions(); render();
+    dateEl.addEventListener('change',()=>{ time=null; renderSlots(); });
+    partyEl.addEventListener('change',hint);
+    langHooks.push(()=>{
+      if(done){ if(last) success(last); return; }
+      partyOptions(); renderSlots();
+      if(btn.getAttribute('aria-busy')!=='true') btn.querySelector('span').textContent=t('res.confirm');
+      if(msg&&msg.key&&msg.cls==='warn') say(msg.key,msg.vars,msg.cls);
+    });
+    partyOptions(); renderSlots();
+    // after closing time, open on tomorrow instead of a day with nothing left
+    if(!slotsEl.querySelector('.slot:not(:disabled)')){ const tm=new Date(); tm.setDate(tm.getDate()+1); dateEl.value=isoLocal(tm); renderSlots(); }
   })();
 
   applyLang(initialLang(),false);
