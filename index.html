@@ -125,27 +125,6 @@
   .parallax-img{position:absolute;left:50%;top:50%;width:100%;height:128%;object-fit:cover;transform:translate(-50%,-50%);will-change:transform}
   .parallax-frame::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,transparent 55%,rgba(11,15,26,.55));pointer-events:none}
 
-  /* CRAFT video band */
-  .craft{padding-top:0;text-align:left}
-  .craft-grid{display:grid;grid-template-columns:1.35fr 1fr;grid-template-rows:auto auto;gap:clamp(22px,3vw,40px) clamp(30px,5vw,70px);align-items:end}
-  .cv{position:relative;overflow:hidden;border:1px solid var(--line);background:#0d1018}
-  .cv video{display:block;width:100%;aspect-ratio:16/9;object-fit:cover;transform:scale(1.04);transition:transform 1.4s var(--ease)}
-  .cv:hover video{transform:scale(1.08)}
-  .cv::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,transparent 55%,rgba(11,15,26,.7));pointer-events:none}
-  .cv figcaption{position:absolute;left:18px;bottom:14px;z-index:1;font-size:13px;color:var(--cream);letter-spacing:.02em}
-  .cv-big{grid-row:1/3}
-  .cv-big video{aspect-ratio:4/5}
-  .craft-copy{align-self:start;padding-top:clamp(0px,4vw,50px)}
-  .craft-copy .lede{margin-inline:0;max-width:40ch}
-  .cv-small{margin-right:clamp(0px,6vw,90px)}
-  @media(max-width:880px){
-    .craft-grid{grid-template-columns:1fr}
-    .cv-big{grid-row:auto}
-    .cv-big video{aspect-ratio:16/10}
-    .craft-copy{order:-1;padding-top:0}
-    .cv-small{margin-right:0;margin-left:18%}
-  }
-
   /* ================= MENU ================= */
   #menu{overflow:hidden}
   #menu::before{content:"";position:absolute;left:50%;top:18%;width:min(1100px,120vw);aspect-ratio:1;transform:translateX(-30%);background:radial-gradient(circle,rgba(240,129,58,.10),transparent 60%);pointer-events:none}
@@ -424,24 +403,6 @@
         <img class="parallax-img" src="assets/img/story.png" alt="Burgerija burger and fries at sunset on the Poreč seafront" loading="lazy" decoding="async">
       </div>
     </div>
-  </div>
-</section>
-
-<!-- CRAFT (video band) -->
-<section class="craft" aria-label="How every burger is built">
-  <div class="wrap craft-grid">
-    <figure class="cv cv-big reveal">
-      <video class="lazyvid" muted loop playsinline preload="metadata" aria-hidden="true"><source src="assets/video/sauce-pour.mp4" type="video/mp4"></video>
-      <figcaption>Poured, pressed and grilled by hand</figcaption>
-    </figure>
-    <div class="craft-copy reveal d1">
-      <h2>Built to order, <em>every time</em></h2>
-      <p class="lede">Buns toasted on the grill, sauces poured by hand, patties pressed the moment you order. Nothing waits under a lamp.</p>
-    </div>
-    <figure class="cv cv-small reveal d2">
-      <video class="lazyvid" muted loop playsinline preload="metadata" aria-hidden="true"><source src="assets/video/burger-reveal.mp4" type="video/mp4"></video>
-      <figcaption>Served straight off the grill</figcaption>
-    </figure>
   </div>
 </section>
 
@@ -786,16 +747,6 @@
     function draw(){x.clearRect(0,0,c.width,c.height);st.forEach(p=>{if(!REDUCED)p.t+=p.s;const a=.3+Math.abs(Math.sin(p.t))*.6;x.beginPath();x.arc(p.x,p.y,p.r,0,7);x.fillStyle='rgba(245,196,81,'+a+')';x.fill()});if(vis&&!REDUCED)requestAnimationFrame(draw)}
     new IntersectionObserver(es=>{const was=vis;vis=es[0].isIntersecting;if(vis&&!was)draw()}).observe(c);
     rs();addEventListener('resize',()=>{rs();draw()});
-  })();
-
-  // ---- craft clips: play only while on screen ----
-  (function(){
-    const vids=[...document.querySelectorAll('.lazyvid')];
-    if(REDUCED) return; // stays on its first frame
-    const vio=new IntersectionObserver(es=>es.forEach(e=>{
-      if(e.isIntersecting){ const p=e.target.play(); if(p) p.catch(()=>{}); } else e.target.pause();
-    }),{threshold:.25});
-    vids.forEach(v=>vio.observe(v));
   })();
 
   // ---- parallax photos ----
