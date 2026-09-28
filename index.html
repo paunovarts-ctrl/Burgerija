@@ -115,7 +115,6 @@
   [data-i18n],[data-i18n-html]{transition:opacity .28s var(--ease),filter .28s var(--ease)}
   body.lang-swap [data-i18n],body.lang-swap [data-i18n-html],body.lang-swap #mbList{opacity:0;filter:blur(4px)}
   #mbList{transition:opacity .28s var(--ease),filter .28s var(--ease)}
-  html[lang="hr"] .orig,html[lang="hr"] .mb-hr,html[lang="hr"] .sc-hr{display:none}
 
   @media(max-width:1060px){
     .nav-links{display:none}
@@ -207,8 +206,6 @@
   .sc-ings{list-style:none;display:flex;flex-wrap:wrap;align-items:baseline;row-gap:4px;margin-top:22px;padding-top:18px;border-top:1px solid rgba(240,129,58,.22);max-width:48ch;font-family:var(--display);font-size:clamp(17px,1.45vw,19.5px);line-height:1.35;color:rgba(244,237,226,.9)}
   .sc-ings li{white-space:nowrap}
   .sc-ings li:not(:last-child)::after{content:"+";display:inline-block;margin:0 .55em;color:var(--ember);font-family:var(--body);font-weight:300;font-size:.95em}
-  .sc-hr{margin-top:18px;font-size:13px;color:var(--dim);font-style:italic;max-width:52ch}
-  .sc-hr::before{content:"HR";font-style:normal;font-weight:600;font-size:10px;letter-spacing:.2em;color:var(--ember);margin-right:10px;vertical-align:1px}
 
   .sc-ctrl{display:flex;align-items:center;gap:14px;margin-top:34px}
   .rb{width:48px;height:48px;border-radius:50%;border:1px solid var(--line);background:rgba(244,237,226,.03);cursor:pointer;display:grid;place-items:center;font-size:18px;transition:border-color .3s,background .3s,transform .25s var(--spring)}
@@ -266,7 +263,6 @@
   .mb-item:hover .mb-name{transform:translateX(4px)}
   .mb-flag{font-size:16px;align-self:center;padding-bottom:5px;margin-left:4px}
   .mb-en{display:block;font-size:14.5px;color:var(--cream);opacity:.86;margin-top:7px;line-height:1.5}
-  .mb-hr{display:block;font-size:12.5px;color:var(--dim);font-style:italic;margin-top:5px;line-height:1.45}
 
   /* sides and extras */
   .sides{display:grid;grid-template-columns:.9fr 1.1fr;gap:clamp(30px,5vw,70px);align-items:center;margin-top:clamp(70px,9vw,120px);text-align:left}
@@ -366,7 +362,7 @@
     .sc-info{min-height:0;align-items:center;text-align:center}
     .sc-tag{align-self:center}
     .sc-ings,.sc-ctrl{justify-content:center}
-    .sc-desc,.sc-hr{margin-inline:auto}
+    .sc-desc,.sc-ings{margin-inline:auto}
     .sc-timer{flex:0 0 120px}
   }
   @media(max-width:880px){
@@ -496,7 +492,6 @@
         <h3 class="sc-name" id="scName"></h3>
         <p class="sc-desc fx" id="scDesc" style="--d:260"></p>
         <ul class="sc-ings" id="scIngs" data-i18n-aria="sc.ings" aria-label="Ingredients"></ul>
-        <p class="sc-hr fx" id="scHr" lang="hr" style="--d:620"></p>
         <div class="sc-ctrl">
           <button class="rb" id="scPrev" type="button" data-i18n-aria="sc.prev" aria-label="Previous burger">&larr;</button>
           <button class="rb" id="scNext" type="button" data-i18n-aria="sc.next" aria-label="Next burger">&rarr;</button>
@@ -533,8 +528,8 @@
       </div>
       <div class="reveal d1">
         <h3 data-i18n="sides.h3">On the side</h3>
-        <div class="side-row"><div class="k" data-i18n="sides.fries">Fries</div><p><span data-i18n="sides.fries.p">French fries, 250g. Fried to order and salted while hot.</span><small class="orig" lang="hr">Prženi krumpir 250g</small></p></div>
-        <div class="side-row"><div class="k" data-i18n="sides.extras">Extras</div><p><span data-i18n="sides.extras.p">Add bacon, cheddar or an extra house sauce to any burger.</span><small class="orig" lang="hr">Dodaci: panceta, cheddar sir, umaci</small></p></div>
+        <div class="side-row"><div class="k" data-i18n="sides.fries">Fries</div><p><span data-i18n="sides.fries.p">French fries, 250g. Fried to order and salted while hot.</span></p></div>
+        <div class="side-row"><div class="k" data-i18n="sides.extras">Extras</div><p><span data-i18n="sides.extras.p">Add bacon, cheddar or an extra house sauce to any burger.</span></p></div>
         <div class="side-row"><div class="k" data-i18n="sides.sizes">Sizes</div><p data-i18n="sides.sizes.p">Most burgers come in more than one size. Ask at the counter which one fits your appetite.</p></div>
         <ul class="sr-only">
           <li data-i18n="ethos.1">100% Fresh</li><li data-i18n="ethos.2">Handmade Patties</li>
@@ -834,7 +829,6 @@
   }
   const cap=s=>s.charAt(0).toUpperCase()+s.slice(1);
   const ingList=(b,li)=>b.ings.map(k=>ING[k][li]);
-  const origLine=b=>cap(ingList(b,2).join(', '));
   function guests(n){
     if(lang==='de') return n+(n===1?' Gast':' Gäste');
     if(lang==='it') return n+(n===1?' ospite':' ospiti');
@@ -1008,7 +1002,7 @@
           plate=document.getElementById('plate'), glow=document.getElementById('scGlow'),
           tip=document.getElementById('orbTip'), bar=document.getElementById('scBar'),
           pauseBtn=document.getElementById('scPause'), list=document.getElementById('mbList');
-    const el={tag:document.getElementById('scTag'),name:document.getElementById('scName'),desc:document.getElementById('scDesc'),ings:document.getElementById('scIngs'),hr:document.getElementById('scHr')};
+    const el={tag:document.getElementById('scTag'),name:document.getElementById('scName'),desc:document.getElementById('scDesc'),ings:document.getElementById('scIngs')};
 
     const cache={};
     function preload(i){ if(!cache[i]){ const im=new Image(); im.decoding='async'; im.src=img(MENU[i]); cache[i]=im; } return cache[i]; }
@@ -1022,8 +1016,7 @@
         return '<li><button type="button" class="mb-item" aria-current="'+(i===idx)+'">'+
           '<span class="mb-thumb"><img src="'+thumb(b)+'" alt="" loading="lazy" decoding="async"></span>'+
           '<span><span class="mb-name"><span>'+nm+'</span>'+flag+'</span>'+
-          '<span class="mb-en">'+b.desc[LI]+'</span>'+
-          '<span class="mb-hr" lang="hr">'+origLine(b)+'</span></span></button></li>';
+          '<span class="mb-en">'+b.desc[LI]+'</span>'+'</span></button></li>';
       }).join('');
       items=[...list.querySelectorAll('.mb-item')];
       items.forEach((it,i)=>it.addEventListener('click',()=>{
@@ -1072,7 +1065,6 @@
       el.name.innerHTML='<span class="row" aria-hidden="true">'+splitName(b.first,60)+'</span><span class="row last" aria-hidden="true">'+splitName(last,60+b.first.length*32)+'</span>';
       el.desc.textContent=b.desc[LI];
       el.ings.innerHTML=ingList(b,LI).map((g,j)=>'<li class="fx" style="--d:'+(360+j*55)+'">'+cap(g)+'</li>').join('');
-      el.hr.textContent=origLine(b);
     }
     function refill(){
       if(REDUCED){ fill(MENU[idx]); return; }
