@@ -388,24 +388,64 @@
   .field input::placeholder{color:#8a877c}
   .field input:focus,.field select:focus{outline:none;border-color:var(--ember)}
   .field select{appearance:none;background-image:linear-gradient(45deg,transparent 50%,var(--ember) 50%),linear-gradient(135deg,var(--ember) 50%,transparent 50%);background-position:calc(100% - 18px) 19px,calc(100% - 12px) 19px;background-size:6px 6px,6px 6px;background-repeat:no-repeat}
-  .slots-head{display:flex;justify-content:space-between;align-items:baseline;margin:8px 0 14px;flex-wrap:wrap;gap:8px}
-  .slots-head .h{font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--ember)}
-  .slots-head .legend{font-size:12px;color:var(--dim)}
-  .slots{display:grid;grid-template-columns:repeat(auto-fill,minmax(92px,1fr));gap:10px;margin-bottom:8px}
-  .slot{border:1px solid var(--line);background:var(--bg);padding:12px 8px;text-align:center;cursor:pointer;transition:transform .25s var(--ease),border-color .25s,background .25s;user-select:none}
-  .slot .t{font-family:var(--display);font-size:18px}
-  .slot .s{font-size:10.5px;letter-spacing:.04em;color:var(--dim);margin-top:4px}
-  .slot:not(:disabled):hover{border-color:var(--ember);transform:translateY(-3px)}
-  .slot.sel{background:var(--ember);border-color:var(--ember);color:#fff}
-  .slot.sel .s{color:rgba(255,255,255,.85)}
-  .slot{font:inherit;color:inherit}
-  .slot:disabled{opacity:.3;cursor:not-allowed}
-  .slot:focus-visible{outline:2px solid var(--ember);outline-offset:2px}
   .opt{font-size:10px;letter-spacing:.1em;color:var(--dim);text-transform:none}
   .field input[aria-invalid="true"]{border-color:#ff7a45}
   .hp{position:absolute;left:-9999px;width:1px;height:1px;overflow:hidden}
   .btn[aria-busy="true"]{pointer-events:none;opacity:.75}
   .btn[aria-busy="true"] span::after{content:"";display:inline-block;width:12px;height:12px;margin-left:10px;border:1.5px solid currentColor;border-right-color:transparent;border-radius:50%;vertical-align:-1px;animation:turn .8s linear infinite}
+  /* booking: a sentence you fill in, not a form */
+  .bk{padding:clamp(28px,4.5vw,56px)}
+  .bk-sum{font-family:var(--display);font-weight:300;font-size:clamp(24px,3vw,38px);line-height:1.22;letter-spacing:-.015em;color:var(--cream);margin-bottom:clamp(30px,4vw,44px);text-wrap:balance;min-height:2.44em}
+  .bk-sum em{font-style:italic;color:var(--ember);white-space:nowrap}
+  .bk-sum em.todo{color:rgba(244,237,226,.3)}
+  .bk-step{margin-bottom:clamp(28px,3.4vw,40px)}
+  .bk-lbl{font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--dim);margin-bottom:14px}
+  .bk-days{display:flex;gap:4px;overflow-x:auto;scroll-snap-type:x proximity;padding-bottom:6px;margin-inline:-6px;scrollbar-width:none;-webkit-mask:linear-gradient(90deg,#000 88%,transparent);mask:linear-gradient(90deg,#000 88%,transparent)}
+  .bk-days::-webkit-scrollbar{display:none}
+  .bk-day{flex:0 0 auto;scroll-snap-align:start;min-width:66px;padding:10px 8px 12px;border:0;background:none;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:2px;position:relative;color:var(--cream);border-radius:2px;transition:background .3s var(--ease)}
+  .bk-day:hover{background:rgba(244,237,226,.04)}
+  .bk-day .wd{font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--dim);white-space:nowrap}
+  .bk-day .num{font-family:var(--display);font-size:30px;line-height:1.05;transition:color .3s,transform .5s var(--spring)}
+  .bk-day .mo{font-size:10.5px;color:var(--dim)}
+  .bk-day::after{content:"";position:absolute;left:18%;right:18%;bottom:2px;height:2px;background:var(--ember);transform:scaleX(0);transition:transform .5s cubic-bezier(.32,.72,0,1)}
+  .bk-day[aria-checked="true"] .num{color:var(--ember);transform:translateY(-2px)}
+  .bk-day[aria-checked="true"]::after{transform:scaleX(1)}
+  .bk-day.bk-more .num{font-size:22px;padding:4px 0}
+  .bk-native{position:absolute;opacity:0;pointer-events:none;width:1px;height:1px}
+
+  .bk-split{display:grid;grid-template-columns:minmax(170px,.32fr) 1fr;gap:clamp(28px,5vw,64px);align-items:start}
+  .bk-stepper{display:flex;align-items:center;gap:18px}
+  .bk-stepper button{width:42px;height:42px;border-radius:50%;border:1px solid rgba(244,237,226,.18);background:none;color:var(--cream);font-size:20px;line-height:1;cursor:pointer;transition:border-color .3s,background .3s,transform .25s var(--spring)}
+  .bk-stepper button:hover:not(:disabled){border-color:var(--ember);background:rgba(240,129,58,.1)}
+  .bk-stepper button:active:not(:disabled){transform:scale(.9)}
+  .bk-stepper button:disabled{opacity:.3;cursor:not-allowed}
+  .bk-stepper output{font-family:var(--display);font-weight:300;font-size:52px;line-height:1;min-width:1.3em;text-align:center;font-variant-numeric:tabular-nums}
+  .bk-hint{margin-top:12px;font-size:12.5px;color:var(--dim)}
+
+  .bk-times{display:grid;gap:14px}
+  .bk-grp{display:grid;grid-template-columns:100px 1fr;align-items:baseline;gap:12px}
+  .bk-grp-l{font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:rgba(167,163,148,.75)}
+  .bk-grp-t{display:grid;grid-template-columns:repeat(auto-fill,minmax(66px,1fr));gap:2px 4px}
+  .bk-t{text-align:left}
+  .bk-t{position:relative;border:0;background:none;cursor:pointer;font-family:var(--display);font-size:21px;color:rgba(244,237,226,.82);padding:4px 7px 9px;font-variant-numeric:tabular-nums;transition:color .25s}
+  .bk-t:hover:not(:disabled){color:var(--ember)}
+  .bk-t::after{content:"";position:absolute;left:6px;right:6px;bottom:1px;height:6px;background:var(--ember);-webkit-mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='6' viewBox='0 0 14 6'%3E%3Cpath d='M0 3 Q3.5 0 7 3 T14 3' fill='none' stroke='%23000' stroke-width='1.6'/%3E%3C/svg%3E") repeat-x 0 0/14px 6px;mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='6' viewBox='0 0 14 6'%3E%3Cpath d='M0 3 Q3.5 0 7 3 T14 3' fill='none' stroke='%23000' stroke-width='1.6'/%3E%3C/svg%3E") repeat-x 0 0/14px 6px;transform:scaleX(0);transform-origin:left;transition:transform .45s cubic-bezier(.32,.72,0,1)}
+  .bk-t[aria-checked="true"]{color:var(--ember);font-style:italic}
+  .bk-t[aria-checked="true"]::after{transform:scaleX(1)}
+  .bk-t:disabled{color:rgba(244,237,226,.2);text-decoration:line-through;cursor:not-allowed}
+  .bk-t:focus-visible,.bk-day:focus-visible{outline:2px solid var(--ember);outline-offset:2px}
+
+  .bk-fields{display:grid;grid-template-columns:1fr 1fr;gap:6px clamp(24px,4vw,48px);margin-top:10px}
+  .bk-fields .field label{color:var(--dim)}
+  .bk-fields .field input{background:transparent;border:0;border-bottom:1px solid rgba(244,237,226,.18);padding:8px 0 10px;font-family:var(--display);font-size:20px;color:var(--cream)}
+  .bk-fields .field input::placeholder{color:rgba(167,163,148,.55);font-style:italic}
+  .bk-fields .field input:focus{border-bottom-color:var(--ember)}
+  .bk .res-actions{margin-top:22px}
+  @media(max-width:720px){
+    .bk-split{grid-template-columns:1fr}
+    .bk-grp{grid-template-columns:1fr;gap:4px}
+    .bk-fields{grid-template-columns:1fr}
+  }
   .res-msg{font-size:13.5px;color:var(--dim);margin:6px 0 18px;min-height:18px}
   .res-msg.warn{color:#ff8a5c}
   .res-msg.ok{color:var(--gold)}
@@ -668,26 +708,36 @@
       <p class="lede" data-i18n="res.lede">Pick a date and party size, and we'll show you the open seatings.</p>
     </div>
 
-    <form class="res-card reveal d1" id="resForm" novalidate>
-      <div class="res-row">
-        <div class="field"><label for="rDate" data-i18n="res.date">Date</label><input type="date" id="rDate" required></div>
-        <div class="field"><label for="rParty" data-i18n="res.guests">Guests</label>
-          <select id="rParty"></select>
+    <form class="res-card bk reveal d1" id="resForm" novalidate>
+      <p class="bk-sum" id="bkSum" aria-live="polite"></p>
+
+      <div class="bk-step">
+        <div class="bk-lbl" id="bkDayLbl" data-i18n="res.date">Date</div>
+        <div class="bk-days" id="bkDays" role="radiogroup" aria-labelledby="bkDayLbl"></div>
+        <input type="date" id="rDate" class="bk-native" tabindex="-1" aria-hidden="true">
+      </div>
+
+      <div class="bk-step bk-split">
+        <div>
+          <div class="bk-lbl" id="bkPartyLbl" data-i18n="res.guests">Guests</div>
+          <div class="bk-stepper" role="group" aria-labelledby="bkPartyLbl">
+            <button type="button" id="bkMinus" data-i18n-aria="res.fewer" aria-label="Fewer guests">&minus;</button>
+            <output id="bkParty" aria-live="polite">2</output>
+            <button type="button" id="bkPlus" data-i18n-aria="res.more" aria-label="More guests">+</button>
+          </div>
+          <p class="bk-hint" data-i18n="res.big">More than 10 guests? Call us.</p>
+        </div>
+        <div>
+          <div class="bk-lbl" id="rSlotsLbl" data-i18n="res.slots">Pick a time</div>
+          <div class="bk-times" id="rSlots" role="radiogroup" aria-labelledby="rSlotsLbl"></div>
         </div>
       </div>
 
-      <div class="slots-head">
-        <span class="h" id="rSlotsLbl" data-i18n="res.slots">Pick a time</span>
-        <span class="legend"><span data-i18n="res.big">More than 10 guests? Call us.</span></span>
-      </div>
-      <div class="slots" id="rSlots" role="radiogroup" aria-labelledby="rSlotsLbl"></div>
       <div class="res-msg" id="rMsg" aria-live="polite"></div>
 
-      <div class="res-row">
+      <div class="bk-fields">
         <div class="field"><label for="rName" data-i18n="res.name">Name</label><input type="text" id="rName" data-i18n-ph="res.namePh" placeholder="Your name" autocomplete="name" maxlength="80" required></div>
         <div class="field"><label for="rPhone" data-i18n="res.phone">Phone</label><input type="tel" id="rPhone" placeholder="+385 ..." autocomplete="tel" maxlength="32" required></div>
-      </div>
-      <div class="res-row">
         <div class="field"><label for="rEmail"><span data-i18n="res.email">Email</span> <small class="opt" data-i18n="res.optional">(optional)</small></label><input type="email" id="rEmail" placeholder="you@email.com" autocomplete="email" maxlength="120"></div>
         <div class="field"><label for="rNote"><span data-i18n="res.noteLbl">Anything we should know?</span> <small class="opt" data-i18n="res.optional">(optional)</small></label><input type="text" id="rNote" data-i18n-ph="res.notePh" placeholder="Allergies, a high chair, a birthday..." maxlength="400"></div>
       </div>
@@ -820,8 +870,6 @@
     'res.confirm':["Send request","Anfrage senden","Pošalji upit","Invia richiesta"],
     'res.note':["Prefer to talk? Call us at","Lieber telefonieren? Rufen Sie uns an:","Radije biste razgovarali? Nazovite nas na","Preferisci parlare? Chiamaci al"],
     'res.chooseDate':['Choose a date to see availability.','Wählen Sie ein Datum, um freie Zeiten zu sehen.','Odaberite datum za prikaz slobodnih termina.','Scegli una data per vedere la disponibilità.'],
-    'res.selected':["{time} for {party} on {date}. Add your details and send.","{time} für {party} am {date}. Geben Sie Ihre Daten ein und senden Sie ab.","{time}, {party}, {date}. Unesite podatke i pošaljite.","{time} per {party} il {date}. Inserisci i tuoi dati e invia."],
-    'res.tap':["Pick a time for {party}.","Wählen Sie eine Uhrzeit für {party}.","Odaberite vrijeme za {party}.","Scegli un orario per {party}."],
     'res.pickFirst':["Please pick a time first.","Bitte wählen Sie zuerst eine Uhrzeit.","Najprije odaberite vrijeme.","Scegli prima un orario."],
     'res.needNP':["Please add your name and phone number so we can confirm.","Bitte geben Sie Name und Telefonnummer an, damit wir bestätigen können.","Upišite ime i broj telefona kako bismo mogli potvrditi.","Inserisci nome e numero di telefono per permetterci di confermare."],
     'res.badEmail':['That email address looks incomplete. Check it or leave it empty.','Die E-Mail-Adresse scheint unvollständig. Prüfen Sie sie oder lassen Sie das Feld leer.','E-mail adresa izgleda nepotpuno. Provjerite je ili ostavite polje prazno.',"L'indirizzo email sembra incompleto. Controllalo o lascialo vuoto."],
@@ -839,6 +887,15 @@
     'res.sending':["Sending...","Wird gesendet...","Šaljem...","Invio in corso..."],
     'res.fail':["We couldn't send your request. Please try again, or call us at +385 95 514 9703.","Ihre Anfrage konnte nicht gesendet werden. Bitte versuchen Sie es erneut oder rufen Sie uns an: +385 95 514 9703.","Upit nije poslan. Pokušajte ponovno ili nas nazovite na +385 95 514 9703.","Non siamo riusciti a inviare la richiesta. Riprova o chiamaci al +385 95 514 9703."],
     'res.again':["Book another table","Weiteren Tisch anfragen","Rezerviraj još jedan stol","Prenota un altro tavolo"],
+    'res.sum':["A table for {party} on {date} at {time}","Ein Tisch für {party} am {date} um {time}","Stol za {party}, {date} u {time}","Un tavolo per {party} {date} alle {time}"],
+    'res.today':["Today","Heute","Danas","Oggi"],
+    'res.tomorrow':["Tomorrow","Morgen","Sutra","Domani"],
+    'res.moreDates':["More dates","Weitere Tage","Drugi datum","Altre date"],
+    'res.fewer':["Fewer guests","Weniger Gäste","Manje osoba","Meno ospiti"],
+    'res.more':["More guests","Mehr Gäste","Više osoba","Più ospiti"],
+    'res.lunch':["Lunch","Mittag","Ručak","Pranzo"],
+    'res.afternoon':["Afternoon","Nachmittag","Popodne","Pomeriggio"],
+    'res.evening':["Evening","Abend","Večer","Sera"],
     'visit.badge':['Find Us','So finden Sie uns','Pronađite nas','Dove trovarci'],
     'visit.h2':['Come find us in Poreč','Besuchen Sie uns in Poreč','Posjetite nas u Poreču','Vieni a trovarci a Parenzo'],
     'visit.address':['Address','Adresse','Adresa','Indirizzo'],
@@ -1364,60 +1421,94 @@
 
   // ================= RESERVATION: request form -> /api/reserve -> ntfy push =================
   (function(){
-    const OPEN_HOUR=12, LAST_HOUR=22, MAX_GUESTS=10;
-    const form=document.getElementById('resForm'),
-          dateEl=document.getElementById('rDate'), partyEl=document.getElementById('rParty'),
+    const OPEN_HOUR=12, LAST_HOUR=22, MAX_GUESTS=10, DAYS=14, NOTICE_MIN=45;
+    const GROUPS=[['res.lunch',12,14.5],['res.afternoon',15,17.5],['res.evening',18,22]];
+    const form=document.getElementById('resForm'), sum=document.getElementById('bkSum'),
+          daysEl=document.getElementById('bkDays'), dateEl=document.getElementById('rDate'),
+          partyOut=document.getElementById('bkParty'), minus=document.getElementById('bkMinus'), plus=document.getElementById('bkPlus'),
           slotsEl=document.getElementById('rSlots'), msgEl=document.getElementById('rMsg'),
           nameEl=document.getElementById('rName'), phoneEl=document.getElementById('rPhone'),
           emailEl=document.getElementById('rEmail'), noteEl=document.getElementById('rNote'),
           hpEl=document.getElementById('rWebsite'), btn=document.getElementById('rConfirm');
     const shownAt=Date.now();
-    let time=null, done=false;
-
     const pad=n=>String(n).padStart(2,'0');
-    const isoLocal=d=>d.getFullYear()+'-'+pad(d.getMonth()+1)+'-'+pad(d.getDate());
-    const today=new Date(), max=new Date(today); max.setDate(max.getDate()+90);
-    dateEl.min=isoLocal(today); dateEl.max=isoLocal(max); dateEl.value=isoLocal(today);
-    const fmtDate=(s,opts)=>new Date(s+'T12:00:00').toLocaleDateString(LOCALE[lang],opts);
+    const iso=d=>d.getFullYear()+'-'+pad(d.getMonth()+1)+'-'+pad(d.getDate());
+    const at=s=>new Date(s+'T12:00:00');
+    const fmt=(s,o)=>at(s).toLocaleDateString(LOCALE[lang],o);
+    const esc=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 
-    let msg=null;
-    function say(key,vars,cls){ msg={key,vars,cls}; msgEl.className='res-msg'+(cls?' '+cls:''); msgEl.textContent=key?t(key,vars):''; }
-    function partyOptions(){
-      const v=partyEl.value||'2';
-      partyEl.innerHTML=Array.from({length:MAX_GUESTS},(_,k)=>'<option value="'+(k+1)+'">'+guests(k+1)+'</option>').join('');
-      partyEl.value=v;
+    let date=null, party=2, time=null, done=false, last=null, msg=null;
+    const nowMin=()=>{const n=new Date();return n.getHours()*60+n.getMinutes();};
+    const isPast=(d,tm)=>{ if(d!==iso(new Date())) return false; const [hh,mm]=tm.split(':').map(Number); return hh*60+mm<nowMin()+NOTICE_MIN; };
+    const dayHasTimes=d=>d!==iso(new Date()) || nowMin()+NOTICE_MIN<=LAST_HOUR*60;
+
+    const max=new Date(); max.setDate(max.getDate()+90);
+    dateEl.min=iso(new Date()); dateEl.max=iso(max);
+
+    function say(key,vars,cls){ msg=key?{key,vars,cls}:null; msgEl.className='res-msg'+(cls?' '+cls:''); msgEl.textContent=key?t(key,vars):''; }
+
+    function summary(){
+      const p='<em>'+guests(party)+'</em>';
+      const d=date?'<em>'+fmt(date,{weekday:'long',day:'numeric',month:'long'})+'</em>':'<em class="todo">...</em>';
+      const tm=time?'<em>'+time+'</em>':'<em class="todo">--:--</em>';
+      sum.innerHTML=t('res.sum').replace('{party}',p).replace('{date}',d).replace('{time}',tm);
     }
-    function hint(){
-      const party=+partyEl.value;
-      if(time) say('res.selected',{time,party:guests(party),date:fmtDate(dateEl.value,{weekday:'long',day:'numeric',month:'long'})},'ok');
-      else if(!slotsEl.querySelector('.slot:not(:disabled)')) say('res.doneToday',null,'warn');
-      else say('res.tap',{party:guests(party)});
+
+    // day strip: the next two weeks, plus a calendar for anything later
+    function renderDays(){
+      const start=new Date(); if(!dayHasTimes(iso(start))) start.setDate(start.getDate()+1);
+      const todayIso=iso(new Date()), tmw=new Date(); tmw.setDate(tmw.getDate()+1);
+      const list=[];
+      for(let k=0;k<DAYS;k++){ const d=new Date(start); d.setDate(start.getDate()+k); list.push(iso(d)); }
+      if(date && !list.includes(date)) list.push(date);
+      daysEl.innerHTML=list.map(d=>{
+        const wd=d===todayIso?t('res.today'):d===iso(tmw)?t('res.tomorrow'):fmt(d,{weekday:'short'});
+        return '<button type="button" class="bk-day" role="radio" aria-checked="'+(d===date)+'" data-d="'+d+'">'+
+          '<span class="wd">'+wd+'</span><span class="num">'+at(d).getDate()+'</span><span class="mo">'+fmt(d,{month:'short'})+'</span></button>';
+      }).join('')+'<button type="button" class="bk-day bk-more"><span class="wd">&nbsp;</span><span class="num">&#43;</span><span class="mo">'+t('res.moreDates')+'</span></button>';
+      daysEl.querySelectorAll('.bk-day[data-d]').forEach(b=>b.addEventListener('click',()=>pickDate(b.dataset.d)));
+      daysEl.querySelector('.bk-more').addEventListener('click',()=>{
+        dateEl.value=date||'';
+        try{ dateEl.showPicker(); }catch(e){ dateEl.style.pointerEvents='auto'; dateEl.focus(); dateEl.click(); }
+      });
+      if(!date) date=list[0];
+      daysEl.querySelectorAll('.bk-day[data-d]').forEach(b=>b.setAttribute('aria-checked',String(b.dataset.d===date)));
     }
-    function renderSlots(){
-      const d=dateEl.value, isToday=d===isoLocal(new Date()), now=new Date();
-      const soonest=now.getHours()*60+now.getMinutes()+45;   // at least 45 minutes' notice
-      slotsEl.innerHTML='';
-      for(let hr=OPEN_HOUR;hr<=LAST_HOUR;hr++){
-        for(const m of [0,30]){
-          if(hr===LAST_HOUR&&m===30) continue;
-          const tm=pad(hr)+':'+pad(m);
-          const b=document.createElement('button');
-          b.type='button'; b.className='slot'; b.setAttribute('role','radio');
-          b.innerHTML='<span class="t">'+tm+'</span>';
-          b.disabled=isToday && hr*60+m<soonest;
-          b.setAttribute('aria-checked',String(tm===time && !b.disabled));
-          if(tm===time && !b.disabled) b.classList.add('sel');
-          b.addEventListener('click',()=>{
-            time=tm;
-            slotsEl.querySelectorAll('.slot').forEach(x=>{ x.classList.toggle('sel',x===b); x.setAttribute('aria-checked',String(x===b)); });
-            hint();
-          });
-          slotsEl.appendChild(b);
+    dateEl.addEventListener('change',()=>{ if(dateEl.value) pickDate(dateEl.value,true); });
+    function pickDate(d,fromCal){
+      date=d;
+      if(time && isPast(date,time)) time=null;
+      if(fromCal) renderDays();
+      daysEl.querySelectorAll('.bk-day[data-d]').forEach(b=>b.setAttribute('aria-checked',String(b.dataset.d===date)));
+      const sel=daysEl.querySelector('.bk-day[aria-checked="true"]'); sel&&sel.scrollIntoView({block:'nearest',inline:'nearest',behavior:REDUCED?'auto':'smooth'});
+      renderTimes(); summary(); if(msg&&msg.key==='res.doneToday') say(null);
+    }
+
+    function renderTimes(){
+      slotsEl.innerHTML=GROUPS.map(([key,a,b])=>{
+        let btns='';
+        for(let x=a;x<=b;x+=.5){
+          const tm=pad(Math.floor(x))+':'+(x%1?'30':'00');
+          const off=isPast(date,tm);
+          btns+='<button type="button" class="bk-t" role="radio" aria-checked="'+(tm===time)+'"'+(off?' disabled':'')+' data-t="'+tm+'">'+tm+'</button>';
         }
-      }
-      if(time && !slotsEl.querySelector('.slot.sel')) time=null;
-      hint();
+        return '<div class="bk-grp"><span class="bk-grp-l">'+t(key)+'</span><div class="bk-grp-t">'+btns+'</div></div>';
+      }).join('');
+      slotsEl.querySelectorAll('.bk-t').forEach(b=>b.addEventListener('click',()=>{
+        time=b.dataset.t;
+        slotsEl.querySelectorAll('.bk-t').forEach(x=>x.setAttribute('aria-checked',String(x===b)));
+        summary(); if(msg&&msg.key==='res.pickFirst') say(null);
+      }));
+      if(!slotsEl.querySelector('.bk-t:not(:disabled)')) say('res.doneToday',null,'warn');
     }
+
+    function setParty(n){
+      party=Math.max(1,Math.min(MAX_GUESTS,n));
+      partyOut.textContent=party; minus.disabled=party<=1; plus.disabled=party>=MAX_GUESTS;
+      summary();
+    }
+    minus.addEventListener('click',()=>setParty(party-1));
+    plus.addEventListener('click',()=>setParty(party+1));
 
     function setBusy(on){
       btn.setAttribute('aria-busy',String(on));
@@ -1427,28 +1518,24 @@
       e.preventDefault();
       [nameEl,phoneEl,emailEl].forEach(x=>x.removeAttribute('aria-invalid'));
       const name=nameEl.value.trim(), phone=phoneEl.value.trim(), email=emailEl.value.trim(), note=noteEl.value.trim();
-      if(!time){ say('res.pickFirst',null,'warn'); slotsEl.querySelector('.slot:not(:disabled)')?.focus(); return; }
-      if(!name||!phone){ say('res.needNP',null,'warn'); (name?phoneEl:nameEl).setAttribute('aria-invalid','true'); (name?phoneEl:nameEl).focus(); return; }
+      if(!time){ say('res.pickFirst',null,'warn'); slotsEl.querySelector('.bk-t:not(:disabled)')?.focus(); return; }
+      if(!name||!phone){ say('res.needNP',null,'warn'); const f=name?phoneEl:nameEl; f.setAttribute('aria-invalid','true'); f.focus(); return; }
       if((phone.match(/\d/g)||[]).length<6){ say('res.badPhone',null,'warn'); phoneEl.setAttribute('aria-invalid','true'); phoneEl.focus(); return; }
       if(email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)){ say('res.badEmail',null,'warn'); emailEl.setAttribute('aria-invalid','true'); emailEl.focus(); return; }
 
-      const booking={date:dateEl.value,time,party:+partyEl.value,name,phone,email,note,lang,website:hpEl.value,elapsed:Date.now()-shownAt};
+      const booking={date,time,party,name,phone,email,note,lang,website:hpEl.value,elapsed:Date.now()-shownAt};
       setBusy(true); say(null);
       try{
         const r=await fetch('/api/reserve',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(booking)});
         const j=await r.json().catch(()=>({}));
         if(!r.ok||!j.ok) throw new Error(j.error||r.status);
         success(booking);
-      }catch(err){
-        setBusy(false); say('res.fail',null,'warn');
-      }
+      }catch(err){ setBusy(false); say('res.fail',null,'warn'); }
     });
 
-    const esc=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
-    let last=null;
     function success(b){
       done=true; last=b;
-      const d=fmtDate(b.date,{weekday:'long',day:'numeric',month:'long',year:'numeric'});
+      const d=fmt(b.date,{weekday:'long',day:'numeric',month:'long',year:'numeric'});
       form.innerHTML=
         '<div class="res-success"><div class="tick">✓</div>'+
         '<h3>'+t('res.okH')+'</h3>'+
@@ -1456,20 +1543,15 @@
         '<div class="det">'+t('res.date')+': <span>'+d+'</span><br>'+t('res.okTime')+': <span>'+b.time+'</span><br>'+t('res.guests')+': <span>'+b.party+'</span><br>'+t('res.okContact')+': <span>'+esc(b.phone)+'</span></div>'+
         '<p class="res-note" style="border:0">'+t('res.okNote')+' <a href="tel:+385955149703" style="color:var(--ember)">+385 95 514 9703</a>.</p>'+
         '</div>';
-      form.querySelector('.res-success').focus?.();
     }
 
-    dateEl.addEventListener('change',()=>{ time=null; renderSlots(); });
-    partyEl.addEventListener('change',hint);
     langHooks.push(()=>{
       if(done){ if(last) success(last); return; }
-      partyOptions(); renderSlots();
+      renderDays(); renderTimes(); summary();
       if(btn.getAttribute('aria-busy')!=='true') btn.querySelector('span').textContent=t('res.confirm');
-      if(msg&&msg.key&&msg.cls==='warn') say(msg.key,msg.vars,msg.cls);
+      if(msg) say(msg.key,msg.vars,msg.cls);
     });
-    partyOptions(); renderSlots();
-    // after closing time, open on tomorrow instead of a day with nothing left
-    if(!slotsEl.querySelector('.slot:not(:disabled)')){ const tm=new Date(); tm.setDate(tm.getDate()+1); dateEl.value=isoLocal(tm); renderSlots(); }
+    renderDays(); renderTimes(); setParty(2);
   })();
 
   applyLang(initialLang(),false);
