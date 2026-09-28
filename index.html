@@ -13,6 +13,13 @@
 <meta name="twitter:card" content="summary_large_image" />
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%230b0f1a'/%3E%3Ctext x='32' y='45' text-anchor='middle' font-family='Georgia,serif' font-size='40' fill='%23f0813a'%3EB%3C/text%3E%3C/svg%3E" />
 <link rel="preload" as="image" href="assets/img/sunset-burger.jpg">
+<script>
+  (function(){
+    try{ if(sessionStorage.getItem('bj_loaded')) return; }catch(e){}
+    var d=document.documentElement; d.classList.add('is-loading');
+    setTimeout(function(){ d.classList.remove('is-loading'); }, 7000); // never trap the page
+  })();
+</script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,300;1,9..144,400&family=Archivo:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -57,6 +64,44 @@
     60%{background-position:-18px 30px}
     80%{background-position:38px 8px;opacity:.055}
     100%{background-position:14px -14px;opacity:.065}
+  }
+
+  /* LOADER: a burger stacks itself while the page loads */
+  .loader{display:none}
+  html.is-loading{overflow:hidden}
+  html.is-loading .loader,.loader.done{display:block}
+  html.is-loading .hero *,html.is-loading .hero{animation-play-state:paused!important}
+  .loader{position:fixed;inset:0;z-index:95;pointer-events:none}
+  .ld-half{position:absolute;left:0;right:0;height:50.5%;background:var(--bg);transition:transform 1s cubic-bezier(.77,0,.18,1)}
+  .ld-top{top:0;background:radial-gradient(120% 90% at 50% 100%,rgba(240,129,58,.12),transparent 60%),var(--bg)}
+  .ld-bot{bottom:0;background:radial-gradient(120% 90% at 50% 0%,rgba(240,129,58,.12),transparent 60%),var(--bg)}
+  .ld-center{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:22px;transition:opacity .45s var(--ease),transform .7s cubic-bezier(.32,.72,0,1)}
+  .ld-burger{width:92px;height:74px;display:flex;flex-direction:column;justify-content:flex-end;align-items:center;gap:3px}
+  .ld-l{display:block;opacity:0;transform:translateY(-70px) rotate(-6deg);transition:transform .7s cubic-bezier(.34,1.56,.64,1),opacity .25s}
+  .ld-l.on{opacity:1;transform:none}
+  .bun-top{width:92px;height:28px;border-radius:46px 46px 7px 7px;background:radial-gradient(circle at 30% 30%,#f7b35e,#d9822f 60%,#b8641f);box-shadow:inset 0 -3px 0 rgba(0,0,0,.18)}
+  .lettuce{width:96px;height:7px;border-radius:6px;background:#8fbf7a}
+  .cheese{width:90px;height:6px;border-radius:2px;background:var(--gold)}
+  .patty{width:88px;height:14px;border-radius:8px;background:linear-gradient(#6b3a24,#4a2618)}
+  .bun-bot{width:88px;height:12px;border-radius:4px 4px 16px 16px;background:linear-gradient(#e0913f,#b8641f)}
+  .ld-word{font-family:var(--display);font-weight:500;font-size:clamp(28px,4vw,40px);letter-spacing:.08em;display:flex;overflow:hidden;padding:2px 4px 6px}
+  .ld-word span,.ld-word b{display:inline-block;transform:translateY(110%);animation:ldRise .9s cubic-bezier(.32,.72,0,1) forwards}
+  .ld-word b{color:var(--ember);font-weight:500}
+  .ld-word>*:nth-child(1){animation-delay:.05s}.ld-word>*:nth-child(2){animation-delay:.09s}.ld-word>*:nth-child(3){animation-delay:.13s}
+  .ld-word>*:nth-child(4){animation-delay:.17s}.ld-word>*:nth-child(5){animation-delay:.21s}.ld-word>*:nth-child(6){animation-delay:.25s}
+  .ld-word>*:nth-child(7){animation-delay:.33s}.ld-word>*:nth-child(8){animation-delay:.29s}.ld-word>*:nth-child(9){animation-delay:.33s}
+  @keyframes ldRise{to{transform:none}}
+  .ld-meta{display:flex;align-items:center;gap:14px}
+  .ld-bar{width:120px;height:1px;background:rgba(244,237,226,.12);overflow:hidden}
+  .ld-bar span{display:block;height:100%;background:var(--ember);transform-origin:left;transform:scaleX(0)}
+  .ld-num{font-family:var(--display);font-style:italic;font-size:14px;color:var(--dim);font-variant-numeric:tabular-nums;min-width:3ch}
+  .loader.done .ld-center{opacity:0;transform:translateY(-18px) scale(.96)}
+  .loader.done .ld-top{transform:translateY(-101%);transition-delay:.25s}
+  .loader.done .ld-bot{transform:translateY(101%);transition-delay:.25s}
+  @media(prefers-reduced-motion:reduce){
+    .ld-l,.ld-word span,.ld-word b{animation:none;transition:none;transform:none;opacity:1}
+    .ld-half{transition:opacity .4s}
+    .loader.done .ld-top,.loader.done .ld-bot{transform:none;opacity:0}
   }
 
   /* NAV: floating glass island (double-bezel shell + core) */
@@ -492,6 +537,14 @@
 </style>
 </head>
 <body id="top">
+<div class="loader" id="loader" aria-hidden="true">
+  <div class="ld-half ld-top"></div><div class="ld-half ld-bot"></div>
+  <div class="ld-center">
+    <div class="ld-burger"><i class="ld-l bun-top"></i><i class="ld-l lettuce"></i><i class="ld-l cheese"></i><i class="ld-l patty"></i><i class="ld-l bun-bot"></i></div>
+    <div class="ld-word"><span>B</span><span>U</span><span>R</span><span>G</span><span>E</span><span>R</span><b>i</b><span>J</span><span>A</span></div>
+    <div class="ld-meta"><div class="ld-bar"><span id="ldBar"></span></div><span class="ld-num" id="ldNum">000</span></div>
+  </div>
+</div>
 <a class="skip" href="#main" data-i18n="skip">Skip to content</a>
 <canvas id="globalstars" aria-hidden="true"></canvas>
 <header class="nav" id="header">
@@ -791,6 +844,53 @@
 
 <script>
   const REDUCED=matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  // ================= LOADER =================
+  (function(){
+    const root=document.documentElement, el=document.getElementById('loader');
+    if(!root.classList.contains('is-loading')){ el.remove(); return; }
+    const bar=document.getElementById('ldBar'), num=document.getElementById('ldNum');
+    const layers=[...el.querySelectorAll('.ld-l')].reverse(); // bottom bun first
+    const MIN=REDUCED?400:1300, MAX=5000, t0=performance.now();
+    let target=0, shown=0, finished=false;
+
+    // real work the first screen needs
+    const waits=[
+      document.fonts?document.fonts.ready:Promise.resolve(),
+      new Promise(res=>{ const v=document.getElementById('heroVid'); if(!v||v.readyState>=3) return res(); ['canplay','error','stalled'].forEach(ev=>v.addEventListener(ev,res,{once:true})); }),
+      new Promise(res=>{ const im=new Image(); im.onload=im.onerror=res; im.src='assets/img/burgers/ham.webp'; }),
+      new Promise(res=>{ if(document.readyState==='complete') res(); else addEventListener('load',res,{once:true}); })
+    ];
+    let doneCount=0;
+    waits.forEach(p=>p.then(()=>{ doneCount++; target=doneCount/waits.length; }));
+
+    function frame(now){
+      const elapsed=now-t0;
+      // ease toward real progress, with a slow creep so it never looks frozen
+      const creep=Math.min(.9,elapsed/MAX)*.35;
+      const goal=Math.max(target,creep);
+      shown+=(goal-shown)*(REDUCED?1:.08);
+      const pct=Math.min(100,Math.round(shown*100));
+      bar.style.transform='scaleX('+(shown).toFixed(3)+')';
+      num.textContent=String(pct).padStart(3,'0');
+      layers.forEach((l,i)=>l.classList.toggle('on',shown>=(i*.22)+.04));
+      const ready=(target>=1 && elapsed>=MIN) || elapsed>=MAX;
+      if(ready && !finished){ finished=true; target=1; }
+      if(finished && shown>.985){ finish(); return; }
+      requestAnimationFrame(frame);
+    }
+    function finish(){
+      bar.style.transform='scaleX(1)'; num.textContent='100';
+      layers.forEach(l=>l.classList.add('on'));
+      setTimeout(()=>{
+        el.classList.add('done');
+        root.classList.remove('is-loading');
+        try{ sessionStorage.setItem('bj_loaded','1'); }catch(e){}
+        setTimeout(()=>el.remove(),1400);
+      }, REDUCED?0:420);
+    }
+    requestAnimationFrame(frame);
+  })();
 
   // ================= LANGUAGES =================
   // every row is [English, Deutsch, Hrvatski, Italiano]
