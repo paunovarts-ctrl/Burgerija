@@ -59,23 +59,75 @@
     100%{background-position:14px -14px;opacity:.065}
   }
 
-  /* NAV */
-  header{position:fixed;top:0;left:0;right:0;z-index:80;display:flex;align-items:center;justify-content:space-between;padding:20px clamp(18px,4vw,46px);background:linear-gradient(180deg,rgba(11,15,26,.85),transparent);transition:background .5s var(--ease),padding .5s var(--ease),opacity .45s var(--ease),transform .45s var(--ease)}
-  header.hide{opacity:0;transform:translateY(-100%);pointer-events:none}
-  header.scrolled{background:rgba(11,15,26,.9);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);padding-block:13px}
-  .brand{font-family:var(--display);font-weight:600;font-size:clamp(20px,2.2vw,25px);letter-spacing:.04em}
-  .brand b{color:var(--ember);font-weight:600}
-  nav{display:flex;align-items:center;gap:clamp(16px,2.6vw,36px)}
-  nav a.nl{font-size:13px;letter-spacing:.16em;text-transform:uppercase;color:var(--dim);transition:color .3s;position:relative}
-  nav a.nl::after{content:"";position:absolute;left:0;bottom:-5px;width:100%;height:1px;background:var(--ember);transform:scaleX(0);transform-origin:left;transition:transform .35s var(--ease)}
-  nav a.nl:hover,nav a.nl.cur{color:var(--cream)}
-  nav a.nl:hover::after,nav a.nl.cur::after{transform:scaleX(1)}
-  .burger{display:none;flex-direction:column;gap:5px;background:none;border:0;cursor:pointer;padding:6px}
-  .burger span{width:26px;height:2px;background:var(--cream);transition:.3s}
-  .mobile-menu{position:fixed;inset:0;background:var(--bg);z-index:85;display:flex;flex-direction:column;justify-content:center;gap:6px;padding:40px;transform:translateX(100%);transition:transform .5s var(--ease)}
-  .mobile-menu.open{transform:none}
-  .mobile-menu a{font-family:var(--display);font-size:30px;padding:10px 0;border-bottom:1px solid var(--line)}
-  .close-m{position:absolute;top:24px;right:24px;font-size:36px;background:none;border:0;color:var(--cream);cursor:pointer;line-height:1}
+  /* NAV: floating glass island (double-bezel shell + core) */
+  .nav{position:fixed;top:14px;left:50%;z-index:86;width:min(1160px,calc(100% - 24px));transform:translateX(-50%);transition:transform .7s cubic-bezier(.32,.72,0,1),opacity .5s var(--ease)}
+  .nav.hide{transform:translate(-50%,-150%);opacity:0;pointer-events:none}
+  .nav-shell{padding:5px;border-radius:999px;background:rgba(244,237,226,.045);border:1px solid rgba(244,237,226,.09);backdrop-filter:blur(18px) saturate(1.4);-webkit-backdrop-filter:blur(18px) saturate(1.4);box-shadow:0 18px 50px -18px rgba(4,6,14,.9);transition:background .6s var(--ease),box-shadow .6s var(--ease)}
+  .nav-core{position:relative;display:flex;align-items:center;gap:clamp(10px,1.6vw,22px);padding:7px 7px 7px 22px;border-radius:999px;background:rgba(11,15,26,.58);box-shadow:inset 0 1px 0 rgba(255,255,255,.07),inset 0 -1px 0 rgba(0,0,0,.35);transition:background .6s var(--ease)}
+  .nav.scrolled .nav-core{background:rgba(11,15,26,.86)}
+  .nav.scrolled .nav-shell{box-shadow:0 22px 60px -20px rgba(240,129,58,.22),0 18px 50px -18px rgba(4,6,14,.95)}
+  .brand{font-family:var(--display);font-weight:600;font-size:clamp(19px,1.9vw,23px);letter-spacing:.04em;white-space:nowrap}
+  .brand b{color:var(--ember);font-weight:600;display:inline-block;transition:transform .6s var(--spring)}
+  .brand:hover b{transform:translateY(-3px) rotate(-8deg)}
+  .nav-links{position:relative;display:flex;align-items:center;margin-left:auto}
+  .nav-links .nl{position:relative;z-index:1;font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--dim);padding:10px 16px;border-radius:999px;white-space:nowrap;transition:color .35s var(--ease)}
+  .nav-links .nl:hover,.nav-links .nl.cur{color:var(--cream)}
+  .nav-hl{position:absolute;left:0;top:50%;height:36px;width:0;border-radius:999px;background:rgba(240,129,58,.14);box-shadow:inset 0 0 0 1px rgba(240,129,58,.38);transform:translate(0,-50%);opacity:0;transition:transform .55s cubic-bezier(.32,.72,0,1),width .55s cubic-bezier(.32,.72,0,1),opacity .3s}
+  .nav-hl.on{opacity:1}
+  .lang{position:relative;display:flex;padding:3px;border-radius:999px;background:rgba(244,237,226,.05);box-shadow:inset 0 0 0 1px rgba(244,237,226,.08)}
+  .lang button{position:relative;z-index:1;width:36px;height:30px;border:0;background:none;cursor:pointer;font-size:11px;font-weight:600;letter-spacing:.08em;color:var(--dim);border-radius:999px;transition:color .35s var(--ease)}
+  .lang button:hover{color:var(--cream)}
+  .lang button[aria-pressed="true"]{color:#fff}
+  .lang-hl{position:absolute;top:3px;left:3px;width:36px;height:30px;border-radius:999px;background:var(--ember);box-shadow:0 4px 14px -2px rgba(240,129,58,.55),inset 0 1px 0 rgba(255,255,255,.25);transform:translateX(calc(var(--li,0) * 36px));transition:transform .6s var(--spring)}
+  .nav-cta{display:inline-flex;align-items:center;gap:10px;padding:6px 6px 6px 18px;border-radius:999px;background:var(--cream);color:var(--char);font-size:12px;font-weight:600;letter-spacing:.06em;white-space:nowrap;transition:transform .25s var(--ease),background .35s}
+  .nav-cta .ic{width:30px;height:30px;border-radius:50%;display:grid;place-items:center;background:var(--ember);color:#fff;font-size:14px;transition:transform .5s var(--spring)}
+  .nav-cta:hover{background:#fff}
+  .nav-cta:hover .ic{transform:translate(2px,-2px) scale(1.08) rotate(45deg)}
+  .nav-cta:active{transform:scale(.97)}
+  .burger{display:none;position:relative;width:44px;height:44px;border-radius:50%;border:0;cursor:pointer;background:rgba(244,237,226,.07);box-shadow:inset 0 0 0 1px rgba(244,237,226,.1);flex:0 0 auto}
+  .burger span{position:absolute;left:13px;width:18px;height:1.5px;border-radius:2px;background:var(--cream);transition:transform .6s cubic-bezier(.32,.72,0,1),top .6s cubic-bezier(.32,.72,0,1)}
+  .burger span:first-child{top:18px}.burger span:last-child{top:25px}
+  body.menu-open .burger span:first-child{top:21.5px;transform:rotate(45deg)}
+  body.menu-open .burger span:last-child{top:21.5px;transform:rotate(-45deg)}
+  body.menu-open .nav{transform:translateX(-50%)!important;opacity:1!important;pointer-events:auto!important}
+
+  /* full-screen glass menu */
+  .overlay{position:fixed;inset:0;z-index:85;background:rgba(8,11,19,.82);backdrop-filter:blur(28px) saturate(1.3);-webkit-backdrop-filter:blur(28px) saturate(1.3);clip-path:circle(0% at calc(100% - 46px) 42px);transition:clip-path .9s cubic-bezier(.32,.72,0,1);visibility:hidden}
+  body.menu-open .overlay{clip-path:circle(150% at calc(100% - 46px) 42px);visibility:visible}
+  .ov-inner{height:100%;display:flex;flex-direction:column;justify-content:center;gap:34px;padding:110px clamp(24px,7vw,60px) 40px;overflow:auto}
+  .ov-links{display:flex;flex-direction:column;gap:2px}
+  .ov-links a{display:block;overflow:hidden;font-family:var(--display);font-weight:300;font-size:clamp(40px,11vw,76px);line-height:1.12;letter-spacing:-.02em}
+  .ov-links .m{display:inline-block;transform:translateY(110%);transition:transform .9s cubic-bezier(.32,.72,0,1) calc(.12s + var(--i)*.06s),color .3s}
+  .ov-links a:hover .m,.ov-links a:focus-visible .m{color:var(--ember);font-style:italic}
+  .ov-book .m{color:var(--ember);font-style:italic}
+  .ov-book i{font-style:normal;font-size:.6em;vertical-align:.25em}
+  .ov-lang,.ov-foot{opacity:0;transform:translateY(24px);transition:opacity .7s var(--ease) calc(.12s + var(--i)*.06s),transform .9s cubic-bezier(.32,.72,0,1) calc(.12s + var(--i)*.06s)}
+  body.menu-open .ov-links .m{transform:none}
+  body.menu-open .ov-lang,body.menu-open .ov-foot{opacity:1;transform:none}
+  .ov-lang{display:grid;grid-template-columns:1fr 1fr;gap:8px;max-width:360px}
+  .ov-lang button{border:0;cursor:pointer;padding:11px 18px;border-radius:999px;background:rgba(244,237,226,.05);box-shadow:inset 0 0 0 1px rgba(244,237,226,.12);font-size:14px;color:var(--cream);transition:background .3s,box-shadow .3s,color .3s,transform .2s}
+  .ov-lang button[aria-pressed="true"]{background:var(--ember);color:#fff;box-shadow:none}
+  .ov-lang button:active{transform:scale(.96)}
+  .ov-foot{display:flex;flex-wrap:wrap;gap:8px 22px;font-size:13px;color:var(--dim);letter-spacing:.04em}
+  .ov-foot a{color:var(--cream)}
+
+  /* language swap: text dissolves and re-forms */
+  [data-i18n],[data-i18n-html]{transition:opacity .28s var(--ease),filter .28s var(--ease)}
+  body.lang-swap [data-i18n],body.lang-swap [data-i18n-html],body.lang-swap #mbList{opacity:0;filter:blur(4px)}
+  #mbList{transition:opacity .28s var(--ease),filter .28s var(--ease)}
+  html[lang="hr"] .orig,html[lang="hr"] .mb-hr,html[lang="hr"] .sc-hr{display:none}
+
+  @media(max-width:1060px){
+    .nav-links{display:none}
+    .lang{margin-left:auto}
+    .burger{display:block}
+  }
+  @media(max-width:640px){
+    .nav-cta{display:none}
+    .nav-core{padding-left:16px;gap:8px}
+    .lang button{width:31px}
+    .lang-hl{width:31px;transform:translateX(calc(var(--li,0) * 31px))}
+  }
 
   /* HERO */
   .hero{position:relative;min-height:100svh;min-height:100dvh;display:flex;align-items:center;overflow:hidden;padding:110px 0 70px}
@@ -307,7 +359,6 @@
     .sc-timer{flex:0 0 120px}
   }
   @media(max-width:880px){
-    nav .nl{display:none}.burger{display:flex}
     .story,.visit-grid,.sides{grid-template-columns:1fr}
     .mb-list{grid-template-columns:1fr}
   }
@@ -319,7 +370,6 @@
     .side-row{grid-template-columns:1fr;gap:6px}
     .orb{width:13.5%}
   }
-  @media(min-width:881px){.mobile-menu{display:none}}
 
   @media(prefers-reduced-motion:reduce){
     html{scroll-behavior:auto}
@@ -331,23 +381,49 @@
 </style>
 </head>
 <body id="top">
-<a class="skip" href="#main">Skip to content</a>
+<a class="skip" href="#main" data-i18n="skip">Skip to content</a>
 <canvas id="globalstars" aria-hidden="true"></canvas>
-<header id="header">
-  <a href="#top" class="brand" aria-label="BURGERiJA home">BURGER<b>i</b>JA</a>
-  <nav aria-label="Main">
-    <a href="#story" class="nl">Story</a>
-    <a href="#menu" class="nl">Menu</a>
-    <a href="#ratings" class="nl">Reviews</a>
-    <a href="#reserve" class="nl">Reserve</a>
-    <a href="#visit" class="nl">Visit</a>
-    <button class="burger" id="burger" aria-label="Open menu" aria-controls="mobileMenu" aria-expanded="false"><span></span><span></span><span></span></button>
-  </nav>
+<header class="nav" id="header">
+  <div class="nav-shell">
+    <div class="nav-core">
+      <a href="#top" class="brand" aria-label="BURGERiJA">BURGER<b>i</b>JA</a>
+      <nav class="nav-links" id="navLinks" aria-label="Main">
+        <span class="nav-hl" id="navHl" aria-hidden="true"></span>
+        <a href="#story" class="nl" data-i18n="nav.story">Story</a>
+        <a href="#menu" class="nl" data-i18n="nav.menu">Menu</a>
+        <a href="#ratings" class="nl" data-i18n="nav.reviews">Reviews</a>
+        <a href="#visit" class="nl" data-i18n="nav.visit">Visit</a>
+      </nav>
+      <div class="lang" id="langSw" role="group" data-i18n-aria="lang.label" aria-label="Language">
+        <span class="lang-hl" aria-hidden="true"></span>
+        <button type="button" data-lang="en" lang="en" aria-label="English">EN</button>
+        <button type="button" data-lang="de" lang="de" aria-label="Deutsch">DE</button>
+        <button type="button" data-lang="hr" lang="hr" aria-label="Hrvatski">HR</button>
+        <button type="button" data-lang="it" lang="it" aria-label="Italiano">IT</button>
+      </div>
+      <a href="#reserve" class="nav-cta"><span data-i18n="nav.cta">Book a table</span><span class="ic" aria-hidden="true">&#8599;</span></a>
+      <button class="burger" id="burger" type="button" data-i18n-aria="nav.open" aria-label="Open menu" aria-controls="mobileMenu" aria-expanded="false"><span></span><span></span></button>
+    </div>
+  </div>
 </header>
 
-<div class="mobile-menu" id="mobileMenu">
-  <button class="close-m" id="closeM" aria-label="Close menu">&times;</button>
-  <a href="#story">Story</a><a href="#menu">Menu</a><a href="#ratings">Reviews</a><a href="#reserve">Reserve</a><a href="#visit">Visit</a>
+<div class="overlay" id="mobileMenu" aria-hidden="true">
+  <div class="ov-inner">
+    <nav class="ov-links" aria-label="Main">
+      <a href="#story" style="--i:0"><span class="m"><span data-i18n="nav.story">Story</span></span></a>
+      <a href="#menu" style="--i:1"><span class="m"><span data-i18n="nav.menu">Menu</span></span></a>
+      <a href="#ratings" style="--i:2"><span class="m"><span data-i18n="nav.reviews">Reviews</span></span></a>
+      <a href="#visit" style="--i:3"><span class="m"><span data-i18n="nav.visit">Visit</span></span></a>
+      <a href="#reserve" class="ov-book" style="--i:4"><span class="m"><span data-i18n="nav.cta">Book a table</span> <i aria-hidden="true">&#8599;</i></span></a>
+    </nav>
+    <div class="ov-lang" style="--i:5" role="group" data-i18n-aria="lang.label" aria-label="Language">
+      <button type="button" data-lang="en" lang="en">English</button>
+      <button type="button" data-lang="de" lang="de">Deutsch</button>
+      <button type="button" data-lang="hr" lang="hr">Hrvatski</button>
+      <button type="button" data-lang="it" lang="it">Italiano</button>
+    </div>
+    <div class="ov-foot" style="--i:6"><a href="tel:+385955149703">+385 95 514 9703</a><span>Nikola Tesla 8, Poreč</span></div>
+  </div>
 </div>
 
 <main id="main">
@@ -357,18 +433,18 @@
     <source src="assets/video/hero.mp4" type="video/mp4" />
   </video>
   <div class="hero-content">
-    <span class="eyebrow">Poreč's First Burger Bar · Istria, Croatia</span>
-    <h1>BURGER<span style="color:var(--ember)">i</span>JA<span class="sub">Where the Adriatic meets the grill</span></h1>
-    <p class="tag">Handcrafted burgers, craft Istrian beer, and a seafront table with a view that stays with you long after the last bite.</p>
+    <span class="eyebrow" data-i18n="hero.eyebrow">Poreč's First Burger Bar · Istria, Croatia</span>
+    <h1>BURGER<span style="color:var(--ember)">i</span>JA<span class="sub" data-i18n="hero.sub">Where the Adriatic meets the grill</span></h1>
+    <p class="tag" data-i18n="hero.tag">Handcrafted burgers, craft Istrian beer, and a seafront table with a view that stays with you long after the last bite.</p>
     <div class="chips">
-      <span class="chip hot">#1 First in Poreč</span>
-      <span class="chip">Handmade</span>
-      <span class="chip">Never Frozen</span>
-      <span class="chip">Fresh Baked Daily</span>
-      <span class="chip">4.7 ★ on Google</span>
-      <span class="chip">Seafront</span>
+      <span class="chip hot" data-i18n="chip.first">#1 First in Poreč</span>
+      <span class="chip" data-i18n="chip.hand">Handmade</span>
+      <span class="chip" data-i18n="chip.frozen">Never Frozen</span>
+      <span class="chip" data-i18n="chip.baked">Fresh Baked Daily</span>
+      <span class="chip" data-i18n="chip.google">4.7 ★ on Google</span>
+      <span class="chip" data-i18n="chip.sea">Seafront</span>
     </div>
-    <div class="hero-cta"><a href="#menu" class="btn"><span>Explore the Menu</span></a></div>
+    <div class="hero-cta"><a href="#menu" class="btn"><span data-i18n="hero.cta">Explore the Menu</span></a></div>
   </div>
 </section>
 
@@ -376,13 +452,13 @@
 <section id="story">
   <div class="wrap story">
     <div class="reveal">
-      <h2>Poreč's original burger bar</h2>
-      <p class="lede">It started with a simple idea on the Adriatic coast: a real burger, made by hand, served where the sea meets the sunset. Burgerija became the first burger bar in Poreč, and quickly the place locals and travellers return to, season after season.</p>
-      <p class="lede">Everything is built fresh. Patties pressed by hand, buns baked daily, sauces made in-house, and ingredients sourced locally across Istria. Nothing frozen, nothing shortcut. Just fire, craft, and a table by the water.</p>
+      <h2 data-i18n="story.h2">Poreč's original burger bar</h2>
+      <p class="lede" data-i18n="story.p1">It started with a simple idea on the Adriatic coast: a real burger, made by hand, served where the sea meets the sunset. Burgerija became the first burger bar in Poreč, and quickly the place locals and travellers return to, season after season.</p>
+      <p class="lede" data-i18n="story.p2">Everything is built fresh. Patties pressed by hand, buns baked daily, sauces made in-house, and ingredients sourced locally across Istria. Nothing frozen, nothing shortcut. Just fire, craft, and a table by the water.</p>
       <div class="stats">
-        <div class="stat"><div class="n">#1</div><div class="l">First burger bar in Poreč</div></div>
-        <div class="stat"><div class="n">4.7★</div><div class="l">Google rating</div></div>
-        <div class="stat"><div class="n">100%</div><div class="l">Fresh, never frozen</div></div>
+        <div class="stat"><div class="n">#1</div><div class="l" data-i18n="stat.first">First burger bar in Poreč</div></div>
+        <div class="stat"><div class="n">4.7★</div><div class="l" data-i18n="stat.google">Google rating</div></div>
+        <div class="stat"><div class="n">100%</div><div class="l" data-i18n="stat.fresh">Fresh, never frozen</div></div>
       </div>
     </div>
     <div class="reveal d1">
@@ -397,9 +473,9 @@
 <section id="menu">
   <div class="wrap">
     <div class="menu-head reveal">
-      <span class="badge">The Menu</span>
-      <h2>Fourteen burgers, <em>one grill</em></h2>
-      <p class="lede">Every beef patty is pressed by hand from 100% beef and every bun is baked the same day. Pick one from the wheel, or let it turn for you.</p>
+      <span class="badge" data-i18n="menu.badge">The Menu</span>
+      <h2 data-i18n-html="menu.h2">Fourteen burgers, <em>one grill</em></h2>
+      <p class="lede" data-i18n="menu.lede">Every beef patty is pressed by hand from 100% beef and every bun is baked the same day. Pick one from the wheel, or let it turn for you.</p>
     </div>
 
     <div class="showcase reveal d1" id="showcase" tabindex="-1" aria-roledescription="carousel" aria-label="Burger showcase">
@@ -407,11 +483,11 @@
         <span class="sc-tag fx" id="scTag" style="--d:0"></span>
         <h3 class="sc-name" id="scName"></h3>
         <p class="sc-desc fx" id="scDesc" style="--d:260"></p>
-        <ul class="sc-ings" id="scIngs" aria-label="Ingredients"></ul>
+        <ul class="sc-ings" id="scIngs" data-i18n-aria="sc.ings" aria-label="Ingredients"></ul>
         <p class="sc-hr fx" id="scHr" lang="hr" style="--d:620"></p>
         <div class="sc-ctrl">
-          <button class="rb" id="scPrev" type="button" aria-label="Previous burger">&larr;</button>
-          <button class="rb" id="scNext" type="button" aria-label="Next burger">&rarr;</button>
+          <button class="rb" id="scPrev" type="button" data-i18n-aria="sc.prev" aria-label="Previous burger">&larr;</button>
+          <button class="rb" id="scNext" type="button" data-i18n-aria="sc.next" aria-label="Next burger">&rarr;</button>
           <div class="sc-timer" aria-hidden="true"><span id="scBar"></span></div>
           <button class="sc-pause" id="scPause" type="button" aria-pressed="false">Pause</button>
         </div>
@@ -427,95 +503,10 @@
 
     <div class="board reveal">
       <div class="board-head">
-        <h3>The full menu</h3>
-        <p>Tap any burger to put it on the plate. Most come in more than one size, so ask at the counter.</p>
+        <h3 data-i18n="board.h3">The full menu</h3>
+        <p data-i18n="board.p">Tap any burger to put it on the plate. Most come in more than one size, so ask at the counter.</p>
       </div>
-      <ul class="mb-list" id="mbList">
-        <li><button type="button" class="mb-item" data-id="ham" data-tag="The original" data-ings="Beef patty|BURGERiJA white sauce|Onion|Pickles|Ketchup">
-          <span class="mb-thumb"><img src="assets/img/burgers/ham-t.webp" alt="" loading="lazy" decoding="async"></span>
-          <span><span class="mb-name"><span>Ham<i>Burger</i></span></span>
-          <span class="mb-en">Where it all started. A hand-pressed beef patty with our white house sauce, onion, pickles and ketchup.</span>
-          <span class="mb-hr" lang="hr">Juneća pljeskavica, "BURGERiJA" bijeli umak, luk, kiseli krastavci, ketchup</span></span>
-        </button></li>
-        <li><button type="button" class="mb-item" data-id="cheese" data-tag="Classic" data-ings="Beef patty|Cheddar|BURGERiJA white sauce|Onion|Pickles|Ketchup">
-          <span class="mb-thumb"><img src="assets/img/burgers/cheese-t.webp" alt="" loading="lazy" decoding="async"></span>
-          <span><span class="mb-name"><span>Cheese<i>Burger</i></span></span>
-          <span class="mb-en">The original with a slice of cheddar melted right over the patty.</span>
-          <span class="mb-hr" lang="hr">Juneća pljeskavica, cheddar sir, "BURGERiJA" bijeli umak, luk, kiseli krastavci, ketchup</span></span>
-        </button></li>
-        <li><button type="button" class="mb-item" data-id="bacon" data-tag="Classic" data-ings="Beef patty|Bacon|BURGERiJA white sauce|Onion|Pickles|Ketchup">
-          <span class="mb-thumb"><img src="assets/img/burgers/bacon-t.webp" alt="" loading="lazy" decoding="async"></span>
-          <span><span class="mb-name"><span>Bacon<i>Burger</i></span></span>
-          <span class="mb-en">Crisp bacon laid over the beef, with white sauce, onion, pickles and ketchup.</span>
-          <span class="mb-hr" lang="hr">Juneća pljeskavica, panceta, "BURGERiJA" bijeli umak, luk, kiseli krastavci, ketchup</span></span>
-        </button></li>
-        <li><button type="button" class="mb-item" data-id="allin" data-tag="Loaded" data-ings="Beef patty|Cheddar|Bacon|BURGERiJA white sauce|Onion|Pickles|Ketchup">
-          <span class="mb-thumb"><img src="assets/img/burgers/allin-t.webp" alt="" loading="lazy" decoding="async"></span>
-          <span><span class="mb-name"><span>Allin<i>Burger</i></span></span>
-          <span class="mb-en">Cheddar and bacon on the same patty. The one to order when you can't decide.</span>
-          <span class="mb-hr" lang="hr">Juneća pljeskavica, cheddar sir, panceta, "BURGERiJA" bijeli umak, luk, kiseli krastavci, ketchup</span></span>
-        </button></li>
-        <li><button type="button" class="mb-item" data-id="devilinside" data-tag="Hot as hell" data-tone="hot" data-ings="Beef patty|BURGERiJA red sauce|Chilli peppers|Onion|Pickles|Ketchup">
-          <span class="mb-thumb"><img src="assets/img/burgers/devilinside-t.webp" alt="" loading="lazy" decoding="async"></span>
-          <span><span class="mb-name"><span>Devilinside<i>Burger</i></span><span class="mb-flag hot">Hot as hell</span></span>
-          <span class="mb-en">Our red sauce and fresh chilli peppers on beef. It earns the name.</span>
-          <span class="mb-hr" lang="hr">Juneća pljeskavica, "BURGERiJA" crveni umak, ljute papričice, luk, kiseli krastavci, ketchup</span></span>
-        </button></li>
-        <li><button type="button" class="mb-item" data-id="chicken" data-tag="Chicken" data-ings="Chicken|BURGERiJA white sauce|Ketchup">
-          <span class="mb-thumb"><img src="assets/img/burgers/chicken-t.webp" alt="" loading="lazy" decoding="async"></span>
-          <span><span class="mb-name"><span>Chicken<i>Burger</i></span></span>
-          <span class="mb-en">Grilled chicken in a soft bun with white sauce and ketchup. Simple and light.</span>
-          <span class="mb-hr" lang="hr">Piletina, "BURGERiJA" bijeli umak, ketchup</span></span>
-        </button></li>
-        <li><button type="button" class="mb-item" data-id="alessia" data-tag="Purist" data-ings="Beef patty|Bread">
-          <span class="mb-thumb"><img src="assets/img/burgers/alessia-t.webp" alt="" loading="lazy" decoding="async"></span>
-          <span><span class="mb-name"><span>Alessia<i>Burger</i></span></span>
-          <span class="mb-en">Just a beef patty and bread. Nothing else, so the meat has to be good.</span>
-          <span class="mb-hr" lang="hr">Samo juneća pljeskavica i kruh</span></span>
-        </button></li>
-        <li><button type="button" class="mb-item" data-id="steak" data-tag="Signature" data-ings="Rump steak|Grana Padano|Rocket|Mustard|Champignons">
-          <span class="mb-thumb"><img src="assets/img/burgers/steak-t.webp" alt="" loading="lazy" decoding="async"></span>
-          <span><span class="mb-name"><span>Steak<i>Burger</i></span></span>
-          <span class="mb-en">Rump steak instead of a patty, with Grana Padano, rocket, mustard and champignons.</span>
-          <span class="mb-hr" lang="hr">Ramstek, Grana Padano, rukola, senf, šampinjoni</span></span>
-        </button></li>
-        <li><button type="button" class="mb-item" data-id="gorg" data-tag="Signature" data-ings="Beef patty|Gorgonzola|BURGERiJA white sauce|Lamb's lettuce|Garlic">
-          <span class="mb-thumb"><img src="assets/img/burgers/gorg-t.webp" alt="" loading="lazy" decoding="async"></span>
-          <span><span class="mb-name"><span>Gorg<i>Burger</i></span></span>
-          <span class="mb-en">Gorgonzola and garlic on beef, balanced with lamb's lettuce and white sauce.</span>
-          <span class="mb-hr" lang="hr">Juneća pljeskavica, gorgonzola, "BURGERiJA" bijeli umak, matovilac, češnjak</span></span>
-        </button></li>
-        <li><button type="button" class="mb-item" data-id="leolita" data-first="Le(o)lita" data-tag="Signature" data-ings="Beef patty|Prosciutto crudo|BURGERiJA white sauce|Mozzarella|Olives">
-          <span class="mb-thumb"><img src="assets/img/burgers/leolita-t.webp" alt="" loading="lazy" decoding="async"></span>
-          <span><span class="mb-name"><span>Le(o)lita<i>Burger</i></span></span>
-          <span class="mb-en">Istrian pršut, mozzarella and olives over beef, finished with white sauce.</span>
-          <span class="mb-hr" lang="hr">Juneća pljeskavica, pršut, "BURGERiJA" bijeli umak, mozzarella, masline</span></span>
-        </button></li>
-        <li><button type="button" class="mb-item" data-id="smoke" data-tag="Signature" data-ings="Beef patty|Smoked sauce|Baked onion|Iceberg lettuce|Tomato">
-          <span class="mb-thumb"><img src="assets/img/burgers/smoke-t.webp" alt="" loading="lazy" decoding="async"></span>
-          <span><span class="mb-name"><span>Smoke<i>Burger</i></span></span>
-          <span class="mb-en">Smoked sauce and slow-baked onion, with iceberg and tomato for crunch.</span>
-          <span class="mb-hr" lang="hr">Juneća pljeskavica, dimljeni umak, karamelizirani luk, ledena salata, rajčica</span></span>
-        </button></li>
-        <li><button type="button" class="mb-item" data-id="prch" data-tag="Signature" data-ings="Beef patty|Goat cheese|Roasted peppers|BURGERiJA yoghurt dressing|Kalamata olives">
-          <span class="mb-thumb"><img src="assets/img/burgers/prch-t.webp" alt="" loading="lazy" decoding="async"></span>
-          <span><span class="mb-name"><span>Prch<i>Burger</i></span></span>
-          <span class="mb-en">Goat cheese, roasted peppers and kalamata olives, finished with our yoghurt dressing.</span>
-          <span class="mb-hr" lang="hr">Juneća pljeskavica, kozji sir, pečena paprika, "BURGERiJA" jogurt umak, kalamata masline</span></span>
-        </button></li>
-        <li><button type="button" class="mb-item" data-id="greenaffair" data-tag="100% plant based" data-tone="plant" data-ings="Plant-based patty|Vegan white sauce|Cucumber|Iceberg lettuce|Onion|Ketchup|Alfalfa sprouts">
-          <span class="mb-thumb"><img src="assets/img/burgers/greenaffair-t.webp" alt="" loading="lazy" decoding="async"></span>
-          <span><span class="mb-name"><span>Greenaffair<i>Burger</i></span><span class="mb-flag plant">Plant based</span></span>
-          <span class="mb-en">A fully plant-based patty with vegan white sauce, fresh cucumber, iceberg, onion, ketchup and alfalfa sprouts.</span>
-          <span class="mb-hr" lang="hr">Pljeskavica 100% biljnog podrijetla, veganski bijeli umak, svježi krastavci, ledena salata, luk, ketchup, alfalfa klice</span></span>
-        </button></li>
-        <li><button type="button" class="mb-item" data-id="tropic" data-first="Tropic" data-last="Thunder" data-tag="Special edition" data-tone="special" data-ings="180g beef patty|Smoked cheese|Bacon|Spicy mayo|Onion|Pineapple|Rocket|BBQ sauce">
-          <span class="mb-thumb"><img src="assets/img/burgers/tropic-t.webp" alt="" loading="lazy" decoding="async"></span>
-          <span><span class="mb-name"><span>Tropic <i>Thunder</i></span><span class="mb-flag special">Special edition</span></span>
-          <span class="mb-en">180g of beef with smoked cheese, bacon, grilled pineapple, rocket, spicy mayo and bbq sauce.</span>
-          <span class="mb-hr" lang="hr">Juneća pljeskavica 180g, dimljeni sir, panceta, začinjena majoneza, luk, ananas, rokula, bbq umak</span></span>
-        </button></li>
-      </ul>
+      <ul class="mb-list" id="mbList"></ul>
     </div>
 
     <div class="sides">
@@ -525,14 +516,14 @@
         </div>
       </div>
       <div class="reveal d1">
-        <h3>On the side</h3>
-        <div class="side-row"><div class="k">Fries</div><p>French fries, 250g. Fried to order and salted while hot.<small lang="hr">Prženi krumpir 250g</small></p></div>
-        <div class="side-row"><div class="k">Extras</div><p>Add bacon, cheddar or an extra house sauce to any burger.<small lang="hr">Dodaci: panceta, cheddar sir, umaci</small></p></div>
-        <div class="side-row"><div class="k">Sizes</div><p>Most burgers come in more than one size. Ask at the counter which one fits your appetite.</p></div>
+        <h3 data-i18n="sides.h3">On the side</h3>
+        <div class="side-row"><div class="k" data-i18n="sides.fries">Fries</div><p><span data-i18n="sides.fries.p">French fries, 250g. Fried to order and salted while hot.</span><small class="orig" lang="hr">Prženi krumpir 250g</small></p></div>
+        <div class="side-row"><div class="k" data-i18n="sides.extras">Extras</div><p><span data-i18n="sides.extras.p">Add bacon, cheddar or an extra house sauce to any burger.</span><small class="orig" lang="hr">Dodaci: panceta, cheddar sir, umaci</small></p></div>
+        <div class="side-row"><div class="k" data-i18n="sides.sizes">Sizes</div><p data-i18n="sides.sizes.p">Most burgers come in more than one size. Ask at the counter which one fits your appetite.</p></div>
         <div class="ethos">
-          <span class="chip">100% Fresh</span><span class="chip">Handmade Patties</span>
-          <span class="chip">Fresh-Baked Buns Daily</span><span class="chip">House Sauces</span>
-          <span class="chip">Local Ingredients</span>
+          <span class="chip" data-i18n="ethos.1">100% Fresh</span><span class="chip" data-i18n="ethos.2">Handmade Patties</span>
+          <span class="chip" data-i18n="ethos.3">Fresh-Baked Buns Daily</span><span class="chip" data-i18n="ethos.4">House Sauces</span>
+          <span class="chip" data-i18n="ethos.5">Local Ingredients</span>
         </div>
       </div>
     </div>
@@ -543,7 +534,7 @@
 <section id="ratings">
   <div class="wrap">
     <div class="reveal">
-      <h2>Guests love it</h2>
+      <h2 data-i18n="rev.h2">Guests love it</h2>
     </div>
   </div>
   <div class="carousel reveal d1">
@@ -564,7 +555,7 @@
       <div class="item"><div class="v">4.7</div><div class="stars">★★★★★</div><div class="src">Restaurant Guru</div></div>
     </div>
     <div class="rlinks reveal d1">
-      <a href="https://www.google.com/maps/search/?api=1&query=BURGERiJA+Burger+Bar+Pore%C4%8D" target="_blank" rel="noopener">Read reviews on Google</a>
+      <a href="https://www.google.com/maps/search/?api=1&query=BURGERiJA+Burger+Bar+Pore%C4%8D" target="_blank" rel="noopener" data-i18n="rev.google">Read reviews on Google</a>
       <a href="https://www.tripadvisor.com/Restaurant_Review-g303829-d12667752-Reviews-Burgerija-Porec_Istria.html" target="_blank" rel="noopener">Tripadvisor</a>
       <a href="https://restaurantguru.com/Burger-bar-Burgerija-Porec" target="_blank" rel="noopener">Restaurant Guru</a>
     </div>
@@ -575,41 +566,35 @@
 <section id="reserve">
   <div class="wrap">
     <div class="reveal">
-      <span class="badge">Book a Table</span>
-      <h2>Reserve your seafront table</h2>
-      <p class="lede">Pick a date and party size, and we'll show you the open seatings.</p>
+      <span class="badge" data-i18n="res.badge">Book a Table</span>
+      <h2 data-i18n="res.h2">Reserve your seafront table</h2>
+      <p class="lede" data-i18n="res.lede">Pick a date and party size, and we'll show you the open seatings.</p>
     </div>
 
     <div class="res-card reveal d1" id="resForm">
       <div class="res-row">
-        <div class="field"><label for="rDate">Date</label><input type="date" id="rDate"></div>
-        <div class="field"><label for="rParty">Guests</label>
-          <select id="rParty">
-            <option value="1">1 guest</option><option value="2" selected>2 guests</option>
-            <option value="3">3 guests</option><option value="4">4 guests</option>
-            <option value="5">5 guests</option><option value="6">6 guests</option>
-            <option value="7">7 guests</option><option value="8">8 guests</option>
-            <option value="9">9 guests</option><option value="10">10 guests</option>
-          </select>
+        <div class="field"><label for="rDate" data-i18n="res.date">Date</label><input type="date" id="rDate"></div>
+        <div class="field"><label for="rParty" data-i18n="res.guests">Guests</label>
+          <select id="rParty"></select>
         </div>
       </div>
 
       <div class="slots-head">
-        <span class="h">Available seatings</span>
-        <span class="legend">Seats left shown per slot. Striped means full.</span>
+        <span class="h" data-i18n="res.slots">Available seatings</span>
+        <span class="legend" data-i18n="res.legend">Seats left shown per slot. Striped means full.</span>
       </div>
       <div class="slots" id="rSlots"></div>
       <div class="res-msg" id="rMsg">Choose a date to see availability.</div>
 
       <div class="res-row">
-        <div class="field"><label for="rName">Name</label><input type="text" id="rName" placeholder="Your name" autocomplete="name"></div>
-        <div class="field"><label for="rPhone">Phone</label><input type="tel" id="rPhone" placeholder="+385 ..." autocomplete="tel"></div>
+        <div class="field"><label for="rName" data-i18n="res.name">Name</label><input type="text" id="rName" data-i18n-ph="res.namePh" placeholder="Your name" autocomplete="name"></div>
+        <div class="field"><label for="rPhone" data-i18n="res.phone">Phone</label><input type="tel" id="rPhone" placeholder="+385 ..." autocomplete="tel"></div>
       </div>
-      <div class="field"><label for="rEmail">Email</label><input type="email" id="rEmail" placeholder="you@email.com" autocomplete="email"></div>
+      <div class="field"><label for="rEmail" data-i18n="res.email">Email</label><input type="email" id="rEmail" placeholder="you@email.com" autocomplete="email"></div>
 
-      <div class="res-actions"><button type="button" class="btn" id="rConfirm"><span>Confirm reservation</span></button></div>
+      <div class="res-actions"><button type="button" class="btn" id="rConfirm"><span data-i18n="res.confirm">Confirm reservation</span></button></div>
 
-      <p class="res-note">To finalise during our seasonal hours, we'll confirm by phone. Or call us directly at <a href="tel:+385955149703" style="color:var(--ember)">+385 95 514 9703</a>.<br><b style="color:var(--dim)">Developer note:</b> bookings are stored locally as a demo. Connect <code>submitReservation()</code> to your backend, email, or a booking provider to take live reservations.</p>
+      <p class="res-note"><span data-i18n="res.note">During our season we confirm by phone. Or call us directly at</span> <a href="tel:+385955149703" style="color:var(--ember)">+385 95 514 9703</a>.<br><b style="color:var(--dim)">Developer note:</b> bookings are stored locally as a demo. Connect <code>submitReservation()</code> to your backend, email, or a booking provider to take live reservations.</p>
     </div>
   </div>
 </section>
@@ -619,20 +604,20 @@
   <canvas class="stars-bg" id="starfield" aria-hidden="true"></canvas>
   <div class="wrap">
     <div class="reveal">
-      <span class="badge">Find Us</span>
-      <h2>Come find us in Poreč</h2>
+      <span class="badge" data-i18n="visit.badge">Find Us</span>
+      <h2 data-i18n="visit.h2">Come find us in Poreč</h2>
     </div>
     <div class="visit-grid">
       <div class="reveal">
-        <div class="vrow"><div class="k">Address</div><div class="val"><a href="https://www.google.com/maps/search/?api=1&query=Nikole+Tesle+8+52440+Pore%C4%8D" target="_blank" rel="noopener">Nikola Tesla 8, 52440 Poreč</a><br><small>Seafront promenade, Pescera</small></div></div>
-        <div class="vrow"><div class="k">Phone</div><div class="val"><a href="tel:+385955149703">+385 95 514 9703</a></div></div>
-        <div class="vrow"><div class="k">Email</div><div class="val"><a href="mailto:marko.pribetic@gmail.com">marko.pribetic@gmail.com</a></div></div>
-        <div class="vrow"><div class="k">Hours</div><div class="val">Seasonal. <small>Call or check Facebook.</small></div></div>
+        <div class="vrow"><div class="k" data-i18n="visit.address">Address</div><div class="val"><a href="https://www.google.com/maps/search/?api=1&query=Nikole+Tesle+8+52440+Pore%C4%8D" target="_blank" rel="noopener">Nikola Tesla 8, 52440 Poreč</a><br><small data-i18n="visit.promenade">Seafront promenade, Pescera</small></div></div>
+        <div class="vrow"><div class="k" data-i18n="visit.phone">Phone</div><div class="val"><a href="tel:+385955149703">+385 95 514 9703</a></div></div>
+        <div class="vrow"><div class="k" data-i18n="visit.email">Email</div><div class="val"><a href="mailto:marko.pribetic@gmail.com">marko.pribetic@gmail.com</a></div></div>
+        <div class="vrow"><div class="k" data-i18n="visit.hours">Hours</div><div class="val" data-i18n-html="visit.hoursVal">Seasonal. <small>Call or check Facebook.</small></div></div>
       </div>
       <div class="reveal d1">
-        <div class="vrow"><div class="k">Payments</div><div class="val">Cards &amp; contactless<br><small>Street parking nearby · Dine-in</small></div></div>
-        <div class="vrow"><div class="k">Social</div><div class="val"><a href="https://www.facebook.com/BURGERIJA/" target="_blank" rel="noopener">Facebook</a> · <a href="https://www.instagram.com/burgerija/" target="_blank" rel="noopener">Instagram @burgerija</a></div></div>
-        <div style="margin-top:34px"><a href="#reserve" class="btn ghost"><span>Reserve a table →</span></a></div>
+        <div class="vrow"><div class="k" data-i18n="visit.pay">Payments</div><div class="val"><span data-i18n="visit.cards">Cards &amp; contactless</span><br><small data-i18n="visit.parking">Street parking nearby · Dine-in</small></div></div>
+        <div class="vrow"><div class="k" data-i18n="visit.social">Social</div><div class="val"><a href="https://www.facebook.com/BURGERIJA/" target="_blank" rel="noopener">Facebook</a> · <a href="https://www.instagram.com/burgerija/" target="_blank" rel="noopener">Instagram @burgerija</a></div></div>
+        <div style="margin-top:34px"><a href="#reserve" class="btn ghost"><span data-i18n="nav.cta">Book a table</span> <span aria-hidden="true">&rarr;</span></a></div>
       </div>
     </div>
   </div>
@@ -644,41 +629,291 @@
     <div class="foot-top">
       <a href="#top" class="brand">BURGER<b>i</b>JA</a>
       <div class="foot-links">
-        <a href="#story">Story</a><a href="#menu">Menu</a>
-        <a href="#ratings">Reviews</a><a href="#visit">Visit</a>
+        <a href="#story" data-i18n="nav.story">Story</a><a href="#menu" data-i18n="nav.menu">Menu</a>
+        <a href="#ratings" data-i18n="nav.reviews">Reviews</a><a href="#visit" data-i18n="nav.visit">Visit</a>
       </div>
     </div>
-    <p class="copy">Nikola Tesla 8, 52440 Poreč · Istria, Croatia · +385 95 514 9703. Poreč's first burger bar. © 2026 Burgerija.</p>
+    <p class="copy"><span data-i18n="foot.copy">Nikola Tesla 8, 52440 Poreč · Istria, Croatia · +385 95 514 9703. Poreč's first burger bar.</span> © 2026 Burgerija.</p>
   </div>
 </footer>
 
 <script>
   const REDUCED=matchMedia('(prefers-reduced-motion: reduce)').matches;
 
+  // ================= LANGUAGES =================
+  // every row is [English, Deutsch, Hrvatski, Italiano]
+  const LANGS=['en','de','hr','it'];
+  const LOCALE={en:'en-GB',de:'de-DE',hr:'hr-HR',it:'it-IT'};
+  const T={
+    'meta.title':["BURGERiJA · Poreč's First Burger Bar · Istria, Croatia","BURGERiJA · Porečs erste Burger-Bar · Istrien, Kroatien","BURGERiJA · Prvi burger bar u Poreču · Istra, Hrvatska","BURGERiJA · Il primo burger bar di Parenzo · Istria, Croazia"],
+    'meta.desc':["Poreč's first burger bar. Fourteen handmade burgers and a seafront table on the Adriatic. Nikola Tesla 8, Poreč.","Porečs erste Burger-Bar. Vierzehn handgemachte Burger und ein Tisch direkt an der Adria. Nikola Tesla 8, Poreč.","Prvi burger bar u Poreču. Četrnaest ručno rađenih burgera i stol uz Jadran. Nikola Tesla 8, Poreč.","Il primo burger bar di Parenzo. Quattordici burger fatti a mano e un tavolo sull'Adriatico. Nikola Tesla 8, Parenzo."],
+    'skip':['Skip to content','Zum Inhalt springen','Preskoči na sadržaj','Vai al contenuto'],
+    'lang.label':['Language','Sprache','Jezik','Lingua'],
+    'nav.story':['Story','Geschichte','Priča','Storia'],
+    'nav.menu':['Menu','Speisekarte','Jelovnik','Menù'],
+    'nav.reviews':['Reviews','Bewertungen','Recenzije','Recensioni'],
+    'nav.visit':['Visit','Anfahrt','Lokacija','Dove siamo'],
+    'nav.cta':['Book a table','Tisch buchen','Rezerviraj stol','Prenota un tavolo'],
+    'nav.open':['Open menu','Menü öffnen','Otvori izbornik','Apri il menu'],
+    'nav.close':['Close menu','Menü schließen','Zatvori izbornik','Chiudi il menu'],
+    'hero.eyebrow':["Poreč's First Burger Bar · Istria, Croatia","Porečs erste Burger-Bar · Istrien, Kroatien","Prvi burger bar u Poreču · Istra, Hrvatska","Il primo burger bar di Parenzo · Istria, Croazia"],
+    'hero.sub':['Where the Adriatic meets the grill','Wo die Adria auf den Grill trifft','Gdje Jadran susreće roštilj',"Dove l'Adriatico incontra la griglia"],
+    'hero.tag':['Handcrafted burgers, craft Istrian beer, and a seafront table with a view that stays with you long after the last bite.','Handgemachte Burger, istrisches Craft-Bier und ein Tisch am Meer mit einer Aussicht, die lange nach dem letzten Bissen bleibt.','Ručno rađeni burgeri, istarsko craft pivo i stol uz more s pogledom koji pamtite dugo nakon zadnjeg zalogaja.',"Burger fatti a mano, birra artigianale istriana e un tavolo sul mare con una vista che resta con te molto dopo l'ultimo morso."],
+    'chip.first':['#1 First in Poreč','#1 Die Erste in Poreč','#1 Prvi u Poreču','#1 Il primo a Parenzo'],
+    'chip.hand':['Handmade','Handgemacht','Ručno rađeno','Fatto a mano'],
+    'chip.frozen':['Never Frozen','Nie gefroren','Nikad smrznuto','Mai surgelato'],
+    'chip.baked':['Fresh Baked Daily','Täglich frisch gebacken','Svježe pečeno svaki dan','Sfornato ogni giorno'],
+    'chip.google':['4.7 ★ on Google','4,7 ★ bei Google','4,7 ★ na Googleu','4,7 ★ su Google'],
+    'chip.sea':['Seafront','Direkt am Meer','Uz more','Sul mare'],
+    'hero.cta':['Explore the Menu','Zur Speisekarte','Pogledaj jelovnik','Scopri il menù'],
+    'story.h2':["Poreč's original burger bar",'Porečs erste Burger-Bar','Porečki originalni burger bar','Il burger bar originale di Parenzo'],
+    'story.p1':['It started with a simple idea on the Adriatic coast: a real burger, made by hand, served where the sea meets the sunset. Burgerija became the first burger bar in Poreč, and quickly the place locals and travellers return to, season after season.','Alles begann mit einer einfachen Idee an der Adriaküste: ein echter Burger, von Hand gemacht, serviert dort, wo das Meer auf den Sonnenuntergang trifft. Burgerija wurde die erste Burger-Bar in Poreč und schnell der Ort, zu dem Einheimische und Reisende Saison für Saison zurückkehren.','Sve je počelo jednostavnom idejom na jadranskoj obali: pravi burger, ručno napravljen, poslužen ondje gdje more susreće zalazak sunca. Burgerija je postala prvi burger bar u Poreču i brzo mjesto kojem se domaći i putnici vraćaju sezonu za sezonom.',"Tutto è iniziato con un'idea semplice sulla costa adriatica: un vero burger, fatto a mano, servito dove il mare incontra il tramonto. Burgerija è diventato il primo burger bar di Parenzo e presto il posto dove residenti e viaggiatori tornano, stagione dopo stagione."],
+    'story.p2':['Everything is built fresh. Patties pressed by hand, buns baked daily, sauces made in-house, and ingredients sourced locally across Istria. Nothing frozen, nothing shortcut. Just fire, craft, and a table by the water.','Alles wird frisch zubereitet. Patties von Hand geformt, Brötchen täglich gebacken, Soßen hausgemacht und Zutaten aus ganz Istrien. Nichts gefroren, keine Abkürzungen. Nur Feuer, Handwerk und ein Tisch am Wasser.','Sve se radi svježe. Pljeskavice oblikovane ručno, peciva pečena svaki dan, umaci domaći, a namirnice iz cijele Istre. Ništa smrznuto, bez prečaca. Samo vatra, zanat i stol uz more.',"Tutto è preparato fresco. Hamburger pressati a mano, panini sfornati ogni giorno, salse fatte in casa e ingredienti da tutta l'Istria. Niente surgelato, nessuna scorciatoia. Solo fuoco, mestiere e un tavolo sull'acqua."],
+    'stat.first':['First burger bar in Poreč','Erste Burger-Bar in Poreč','Prvi burger bar u Poreču','Primo burger bar a Parenzo'],
+    'stat.google':['Google rating','Google-Bewertung','Ocjena na Googleu','Valutazione Google'],
+    'stat.fresh':['Fresh, never frozen','Frisch, nie gefroren','Svježe, nikad smrznuto','Fresco, mai surgelato'],
+    'menu.badge':['The Menu','Speisekarte','Jelovnik','Il menù'],
+    'menu.h2':['Fourteen burgers, <em>one grill</em>','Vierzehn Burger, <em>ein Grill</em>','Četrnaest burgera, <em>jedan roštilj</em>','Quattordici burger, <em>una griglia</em>'],
+    'menu.lede':['Every beef patty is pressed by hand from 100% beef and every bun is baked the same day. Pick one from the wheel, or let it turn for you.','Jedes Patty wird von Hand aus 100% Rindfleisch geformt und jedes Brötchen am selben Tag gebacken. Wählen Sie einen Burger am Rad oder lassen Sie es für sich drehen.','Svaka pljeskavica ručno je oblikovana od 100% junetine, a svako pecivo pečeno istog dana. Odaberite burger na kotaču ili ga pustite da se sam vrti.',"Ogni hamburger è pressato a mano con 100% manzo e ogni panino è sfornato in giornata. Scegline uno dalla ruota, o lasciala girare per te."],
+    'sc.prev':['Previous burger','Vorheriger Burger','Prethodni burger','Burger precedente'],
+    'sc.next':['Next burger','Nächster Burger','Sljedeći burger','Burger successivo'],
+    'sc.pause':['Pause','Pause','Pauza','Pausa'],
+    'sc.play':['Play','Abspielen','Pokreni','Avvia'],
+    'sc.show':['Show','Zeige','Prikaži','Mostra'],
+    'sc.ings':['Ingredients','Zutaten','Sastojci','Ingredienti'],
+    'board.h3':['The full menu','Die ganze Speisekarte','Cijeli jelovnik','Il menù completo'],
+    'board.p':['Tap any burger to put it on the plate. Most come in more than one size, so ask at the counter.','Tippen Sie auf einen Burger, um ihn auf den Teller zu legen. Die meisten gibt es in mehreren Größen, fragen Sie einfach an der Theke.','Dodirnite burger da ga stavite na tanjur. Većina dolazi u više veličina, pitajte na pultu.','Tocca un burger per metterlo nel piatto. Quasi tutti sono disponibili in più formati, chiedi al banco.'],
+    'sides.h3':['On the side','Beilagen','Prilozi','Contorni'],
+    'sides.fries':['Fries','Pommes','Pomfrit','Patatine'],
+    'sides.fries.p':['French fries, 250g. Fried to order and salted while hot.','Pommes frites, 250g. Frisch frittiert und heiß gesalzen.','Pomfrit, 250g. Prži se na narudžbu i soli dok je vruć.','Patatine fritte, 250g. Fritte al momento e salate ancora calde.'],
+    'sides.extras':['Extras','Extras','Dodaci','Extra'],
+    'sides.extras.p':['Add bacon, cheddar or an extra house sauce to any burger.','Bacon, Cheddar oder eine extra Haussoße zu jedem Burger.','Dodajte pancetu, cheddar ili dodatni umak na bilo koji burger.','Aggiungi pancetta, cheddar o una salsa della casa in più a qualsiasi burger.'],
+    'sides.sizes':['Sizes','Größen','Veličine','Formati'],
+    'sides.sizes.p':['Most burgers come in more than one size. Ask at the counter which one fits your appetite.','Die meisten Burger gibt es in mehreren Größen. Fragen Sie an der Theke, welche zu Ihrem Hunger passt.','Većina burgera dolazi u više veličina. Pitajte na pultu koja odgovara vašem apetitu.','Quasi tutti i burger sono disponibili in più formati. Chiedi al banco quello giusto per la tua fame.'],
+    'ethos.1':['100% Fresh','100% frisch','100% svježe','100% fresco'],
+    'ethos.2':['Handmade Patties','Handgeformte Patties','Ručno rađene pljeskavice','Hamburger fatti a mano'],
+    'ethos.3':['Fresh-Baked Buns Daily','Täglich frische Brötchen','Svježa peciva svaki dan','Panini freschi ogni giorno'],
+    'ethos.4':['House Sauces','Hausgemachte Soßen','Domaći umaci','Salse della casa'],
+    'ethos.5':['Local Ingredients','Regionale Zutaten','Lokalne namirnice','Ingredienti locali'],
+    'rev.h2':['Guests love it','Gäste lieben es','Gosti ga obožavaju','Gli ospiti lo adorano'],
+    'rev.google':['Read reviews on Google','Bewertungen auf Google','Recenzije na Googleu','Recensioni su Google'],
+    'res.badge':['Book a Table','Tisch reservieren','Rezervacija','Prenota un tavolo'],
+    'res.h2':['Reserve your seafront table','Reservieren Sie Ihren Tisch am Meer','Rezervirajte stol uz more','Prenota il tuo tavolo sul mare'],
+    'res.lede':["Pick a date and party size, and we'll show you the open seatings.",'Wählen Sie Datum und Personenzahl, wir zeigen Ihnen die freien Zeiten.','Odaberite datum i broj osoba, a mi ćemo vam pokazati slobodne termine.','Scegli data e numero di persone e ti mostriamo gli orari liberi.'],
+    'res.date':['Date','Datum','Datum','Data'],
+    'res.guests':['Guests','Gäste','Gosti','Ospiti'],
+    'res.slots':['Available seatings','Freie Zeiten','Slobodni termini','Orari disponibili'],
+    'res.legend':['Seats left shown per slot. Striped means full.','Freie Plätze pro Zeitfenster. Schraffiert heißt ausgebucht.','Prikazana su slobodna mjesta po terminu. Prugasto znači popunjeno.','Posti liberi per fascia oraria. A righe significa pieno.'],
+    'res.name':['Name','Name','Ime','Nome'],
+    'res.namePh':['Your name','Ihr Name','Vaše ime','Il tuo nome'],
+    'res.phone':['Phone','Telefon','Telefon','Telefono'],
+    'res.email':['Email','E-Mail','E-pošta','Email'],
+    'res.confirm':['Confirm reservation','Reservierung bestätigen','Potvrdi rezervaciju','Conferma prenotazione'],
+    'res.note':['During our season we confirm by phone. Or call us directly at','Während der Saison bestätigen wir telefonisch. Oder rufen Sie uns direkt an:','Tijekom sezone potvrđujemo telefonom. Ili nas nazovite izravno na','Durante la stagione confermiamo per telefono. Oppure chiamaci direttamente al'],
+    'res.chooseDate':['Choose a date to see availability.','Wählen Sie ein Datum, um freie Zeiten zu sehen.','Odaberite datum za prikaz slobodnih termina.','Scegli una data per vedere la disponibilità.'],
+    'res.seats':['{n} seats','{n} Plätze','{n} mjesta','{n} posti'],
+    'res.closed':['closed','vorbei','zatvoreno','chiuso'],
+    'res.selected':['Selected {time} for {party} on {date}. Add your details and confirm.','{time} für {party} am {date} gewählt. Geben Sie Ihre Daten ein und bestätigen Sie.','Odabrano: {time}, {party}, {date}. Unesite podatke i potvrdite.','Selezionato {time} per {party} il {date}. Inserisci i tuoi dati e conferma.'],
+    'res.tap':['Tap an available seating for {party}.','Wählen Sie eine freie Zeit für {party}.','Odaberite slobodan termin za {party}.','Scegli un orario libero per {party}.'],
+    'res.nofit':['No seatings fit {party} that day. Try another date or a smaller party.','An diesem Tag gibt es keinen Platz für {party}. Versuchen Sie ein anderes Datum oder weniger Personen.','Taj dan nema mjesta za {party}. Probajte drugi datum ili manju grupu.',"Nessun orario disponibile per {party} quel giorno. Prova un'altra data o un gruppo più piccolo."],
+    'res.pickFirst':['Please pick an available seating first.','Bitte wählen Sie zuerst eine freie Zeit.','Najprije odaberite slobodan termin.','Scegli prima un orario disponibile.'],
+    'res.needNP':['Please add your name and phone so we can confirm.','Bitte geben Sie Name und Telefonnummer an, damit wir bestätigen können.','Upišite ime i telefon kako bismo mogli potvrditi.','Inserisci nome e telefono per permetterci di confermare.'],
+    'res.badEmail':['That email address looks incomplete. Check it or leave it empty.','Die E-Mail-Adresse scheint unvollständig. Prüfen Sie sie oder lassen Sie das Feld leer.','E-mail adresa izgleda nepotpuno. Provjerite je ili ostavite polje prazno.',"L'indirizzo email sembra incompleto. Controllalo o lascialo vuoto."],
+    'res.filled':['Sorry, that seating just filled up. Please choose another.','Diese Zeit ist leider gerade ausgebucht. Bitte wählen Sie eine andere.','Nažalost, taj termin se upravo popunio. Odaberite drugi.',"Purtroppo quell'orario si è appena riempito. Scegline un altro."],
+    'res.okH':['Table requested','Tisch angefragt','Stol zatražen','Tavolo richiesto'],
+    'res.okThanks':['Thanks, {name}. Your seating is held.','Danke, {name}. Ihr Platz ist vorgemerkt.','Hvala, {name}. Vaš termin je zadržan.','Grazie, {name}. Il tuo tavolo è riservato.'],
+    'res.okTime':['Time','Uhrzeit','Vrijeme','Ora'],
+    'res.okContact':['Contact','Kontakt','Kontakt','Contatto'],
+    'res.okNote':["We'll confirm by phone during our seasonal hours. Need to change it? Call",'Wir bestätigen telefonisch während der Saison. Etwas ändern? Rufen Sie an:','Potvrdit ćemo telefonom tijekom sezone. Trebate promjenu? Nazovite','Confermeremo per telefono durante la stagione. Vuoi modificarla? Chiama il'],
+    'visit.badge':['Find Us','So finden Sie uns','Pronađite nas','Dove trovarci'],
+    'visit.h2':['Come find us in Poreč','Besuchen Sie uns in Poreč','Posjetite nas u Poreču','Vieni a trovarci a Parenzo'],
+    'visit.address':['Address','Adresse','Adresa','Indirizzo'],
+    'visit.promenade':['Seafront promenade, Pescera','Uferpromenade, Pescera','Šetnica uz more, Pescera','Lungomare, Pescera'],
+    'visit.phone':['Phone','Telefon','Telefon','Telefono'],
+    'visit.email':['Email','E-Mail','E-pošta','Email'],
+    'visit.hours':['Hours','Öffnungszeiten','Radno vrijeme','Orari'],
+    'visit.hoursVal':['Seasonal. <small>Call or check Facebook.</small>','Saisonal. <small>Rufen Sie an oder schauen Sie auf Facebook.</small>','Sezonski. <small>Nazovite ili provjerite Facebook.</small>','Stagionale. <small>Chiama o controlla Facebook.</small>'],
+    'visit.pay':['Payments','Zahlung','Plaćanje','Pagamenti'],
+    'visit.cards':['Cards & contactless','Karte & kontaktlos','Kartice i beskontaktno','Carte e contactless'],
+    'visit.parking':['Street parking nearby · Dine-in','Parkplätze in der Nähe · Vor Ort essen','Parking u blizini · Jelo na licu mjesta','Parcheggio vicino · Consumazione sul posto'],
+    'visit.social':['Social','Social Media','Društvene mreže','Social'],
+    'foot.copy':["Nikola Tesla 8, 52440 Poreč · Istria, Croatia · +385 95 514 9703. Poreč's first burger bar.","Nikola Tesla 8, 52440 Poreč · Istrien, Kroatien · +385 95 514 9703. Porečs erste Burger-Bar.","Nikola Tesla 8, 52440 Poreč · Istra, Hrvatska · +385 95 514 9703. Prvi burger bar u Poreču.","Nikola Tesla 8, 52440 Parenzo · Istria, Croazia · +385 95 514 9703. Il primo burger bar di Parenzo."]
+  };
+
+  // ingredients, written the way they sit mid-sentence; chips capitalise the first letter
+  const ING={
+    beef:['beef patty','Rindfleisch-Patty','juneća pljeskavica','hamburger di manzo'],
+    beef180:['180g beef patty','180g Rindfleisch-Patty','juneća pljeskavica 180g','hamburger di manzo 180g'],
+    white:['BURGERiJA white sauce','weiße BURGERiJA-Soße','"BURGERiJA" bijeli umak','salsa bianca BURGERiJA'],
+    red:['BURGERiJA red sauce','rote BURGERiJA-Soße','"BURGERiJA" crveni umak','salsa rossa BURGERiJA'],
+    onion:['onion','Zwiebel','luk','cipolla'],
+    pickles:['pickles','Gewürzgurken','kiseli krastavci','cetriolini'],
+    ketchup:['ketchup','Ketchup','ketchup','ketchup'],
+    cheddar:['cheddar','Cheddar','cheddar sir','cheddar'],
+    bacon:['bacon','Bacon','panceta','pancetta'],
+    chilli:['chilli peppers','scharfe Chilis','ljute papričice','peperoncini piccanti'],
+    chicken:['chicken','Hähnchen','piletina','pollo'],
+    bread:['bread','Brot','kruh','pane'],
+    rump:['rump steak','Rumpsteak','ramstek','controfiletto'],
+    grana:['Grana Padano','Grana Padano','Grana Padano','Grana Padano'],
+    rocket:['rocket','Rucola','rukola','rucola'],
+    mustard:['mustard','Senf','senf','senape'],
+    champ:['champignons','Champignons','šampinjoni','champignon'],
+    gorgonzola:['gorgonzola','Gorgonzola','gorgonzola','gorgonzola'],
+    lamb:["lamb's lettuce",'Feldsalat','matovilac','valerianella'],
+    garlic:['garlic','Knoblauch','češnjak','aglio'],
+    prosciutto:['prosciutto crudo','Rohschinken (Pršut)','pršut','prosciutto crudo'],
+    mozz:['mozzarella','Mozzarella','mozzarella','mozzarella'],
+    olives:['olives','Oliven','masline','olive'],
+    smoked:['smoked sauce','Rauchsoße','dimljeni umak','salsa affumicata'],
+    bonion:['baked onion','karamellisierte Zwiebeln','karamelizirani luk','cipolla caramellata'],
+    iceberg:['iceberg lettuce','Eisbergsalat','ledena salata','lattuga iceberg'],
+    tomato:['tomato','Tomate','rajčica','pomodoro'],
+    goat:['goat cheese','Ziegenkäse','kozji sir','formaggio di capra'],
+    peppers:['roasted peppers','geröstete Paprika','pečena paprika','peperoni arrostiti'],
+    yog:['BURGERiJA yoghurt dressing','BURGERiJA-Joghurtdressing','"BURGERiJA" jogurt umak','salsa allo yogurt BURGERiJA'],
+    kalamata:['kalamata olives','Kalamata-Oliven','kalamata masline','olive Kalamata'],
+    plant:['100% plant-based patty','100% pflanzliches Patty','pljeskavica 100% biljnog podrijetla','burger 100% vegetale'],
+    vegwhite:['vegan white sauce','vegane weiße Soße','veganski bijeli umak','salsa bianca vegana'],
+    cucumber:['fresh cucumber','frische Gurke','svježi krastavci','cetriolo fresco'],
+    alfalfa:['alfalfa sprouts','Alfalfa-Sprossen','alfalfa klice','germogli di erba medica'],
+    smokedcheese:['smoked cheese','Räucherkäse','dimljeni sir','formaggio affumicato'],
+    spicymayo:['spicy mayo','scharfe Mayo','začinjena majoneza','maionese piccante'],
+    pineapple:['pineapple','Ananas','ananas','ananas'],
+    bbq:['bbq sauce','BBQ-Soße','bbq umak','salsa bbq']
+  };
+  const TAG={
+    original:['The original','Das Original','Original',"L'originale"],
+    classic:['Classic','Klassiker','Klasik','Classico'],
+    loaded:['Loaded','Voll beladen','Sve u jednom','Completo'],
+    hot:['Hot as hell','Höllisch scharf','Ljut kao pakao','Piccante da morire'],
+    chicken:['Chicken','Hähnchen','Piletina','Pollo'],
+    purist:['Purist','Purist','Purist','Purista'],
+    signature:['Signature','Signature','Specijalitet','Specialità'],
+    plant:['100% plant based','100% pflanzlich','100% biljno','100% vegetale'],
+    special:['Special edition','Sonderedition','Posebno izdanje','Edizione speciale']
+  };
+  const MENU=[
+    {id:'ham',first:'Ham',tag:'original',ings:['beef','white','onion','pickles','ketchup'],desc:['Where it all started. A hand-pressed beef patty with our white house sauce, onion, pickles and ketchup.','Hier hat alles angefangen. Ein von Hand geformtes Rindfleisch-Patty mit unserer weißen Haussoße, Zwiebel, Gewürzgurken und Ketchup.','Ovdje je sve počelo. Ručno oblikovana juneća pljeskavica s našim bijelim umakom, lukom, kiselim krastavcima i ketchupom.','Dove tutto è cominciato. Un hamburger di manzo pressato a mano con la nostra salsa bianca, cipolla, cetriolini e ketchup.']},
+    {id:'cheese',first:'Cheese',tag:'classic',ings:['beef','cheddar','white','onion','pickles','ketchup'],desc:['The original with a slice of cheddar melted right over the patty.','Das Original mit einer Scheibe Cheddar, direkt auf dem Patty geschmolzen.','Original s kriškom cheddara otopljenog preko pljeskavice.',"L'originale con una fetta di cheddar fusa sulla carne."]},
+    {id:'bacon',first:'Bacon',tag:'classic',ings:['beef','bacon','white','onion','pickles','ketchup'],desc:['Crisp bacon laid over the beef, with white sauce, onion, pickles and ketchup.','Knuspriger Bacon auf dem Rindfleisch, mit weißer Soße, Zwiebel, Gewürzgurken und Ketchup.','Hrskava panceta preko junetine, s bijelim umakom, lukom, kiselim krastavcima i ketchupom.','Pancetta croccante sul manzo, con salsa bianca, cipolla, cetriolini e ketchup.']},
+    {id:'allin',first:'Allin',tag:'loaded',ings:['beef','cheddar','bacon','white','onion','pickles','ketchup'],desc:["Cheddar and bacon on the same patty. The one to order when you can't decide.",'Cheddar und Bacon auf einem Patty. Der Richtige, wenn Sie sich nicht entscheiden können.','Cheddar i panceta na istoj pljeskavici. Za kad se ne možete odlučiti.','Cheddar e pancetta sullo stesso hamburger. Quello da ordinare quando non sai scegliere.']},
+    {id:'devilinside',first:'Devilinside',tag:'hot',tone:'hot',ings:['beef','red','chilli','onion','pickles','ketchup'],desc:['Our red sauce and fresh chilli peppers on beef. It earns the name.','Unsere rote Soße und frische Chilis auf Rindfleisch. Der Name ist Programm.','Naš crveni umak i svježe ljute papričice na junetini. Ime nije slučajno.','La nostra salsa rossa e peperoncini freschi sul manzo. Il nome se lo merita.']},
+    {id:'chicken',first:'Chicken',tag:'chicken',ings:['chicken','white','ketchup'],desc:['Grilled chicken in a soft bun with white sauce and ketchup. Simple and light.','Gegrilltes Hähnchen im weichen Brötchen mit weißer Soße und Ketchup. Einfach und leicht.','Piletina s roštilja u mekanom pecivu s bijelim umakom i ketchupom. Jednostavno i lagano.','Pollo alla griglia in un panino morbido con salsa bianca e ketchup. Semplice e leggero.']},
+    {id:'alessia',first:'Alessia',tag:'purist',ings:['beef','bread'],desc:['Just a beef patty and bread. Nothing else, so the meat has to be good.','Nur Rindfleisch-Patty und Brot. Sonst nichts, also muss das Fleisch gut sein.','Samo juneća pljeskavica i kruh. Ništa drugo, zato meso mora biti dobro.',"Solo hamburger di manzo e pane. Nient'altro, quindi la carne deve essere buona."]},
+    {id:'steak',first:'Steak',tag:'signature',ings:['rump','grana','rocket','mustard','champ'],desc:['Rump steak instead of a patty, with Grana Padano, rocket, mustard and champignons.','Rumpsteak statt Patty, mit Grana Padano, Rucola, Senf und Champignons.','Ramstek umjesto pljeskavice, s Grana Padanom, rukolom, senfom i šampinjonima.',"Controfiletto al posto dell'hamburger, con Grana Padano, rucola, senape e champignon."]},
+    {id:'gorg',first:'Gorg',tag:'signature',ings:['beef','gorgonzola','white','lamb','garlic'],desc:["Gorgonzola and garlic on beef, balanced with lamb's lettuce and white sauce.",'Gorgonzola und Knoblauch auf Rindfleisch, ausgeglichen mit Feldsalat und weißer Soße.','Gorgonzola i češnjak na junetini, uravnoteženi matovilcem i bijelim umakom.','Gorgonzola e aglio sul manzo, bilanciati da valerianella e salsa bianca.']},
+    {id:'leolita',first:'Le(o)lita',tag:'signature',ings:['beef','prosciutto','white','mozz','olives'],desc:['Istrian pršut, mozzarella and olives over beef, finished with white sauce.','Istrischer Pršut, Mozzarella und Oliven auf Rindfleisch, mit weißer Soße.','Istarski pršut, mozzarella i masline na junetini, s bijelim umakom.','Pršut istriano, mozzarella e olive sul manzo, con salsa bianca.']},
+    {id:'smoke',first:'Smoke',tag:'signature',ings:['beef','smoked','bonion','iceberg','tomato'],desc:['Smoked sauce and slow-baked onion, with iceberg and tomato for crunch.','Rauchsoße und langsam gebackene Zwiebeln, dazu Eisbergsalat und Tomate für den Biss.','Dimljeni umak i karamelizirani luk, uz ledenu salatu i rajčicu za svježinu.','Salsa affumicata e cipolla caramellata, con iceberg e pomodoro per la croccantezza.']},
+    {id:'prch',first:'Prch',tag:'signature',ings:['beef','goat','peppers','yog','kalamata'],desc:['Goat cheese, roasted peppers and kalamata olives, finished with our yoghurt dressing.','Ziegenkäse, geröstete Paprika und Kalamata-Oliven, abgerundet mit unserem Joghurt-Dressing.','Kozji sir, pečena paprika i kalamata masline, s našim jogurt umakom.','Formaggio di capra, peperoni arrostiti e olive Kalamata, con la nostra salsa allo yogurt.']},
+    {id:'greenaffair',first:'Greenaffair',tag:'plant',tone:'plant',ings:['plant','vegwhite','cucumber','iceberg','onion','ketchup','alfalfa'],desc:['A fully plant-based patty with vegan white sauce, fresh cucumber, iceberg, onion, ketchup and alfalfa sprouts.','Ein komplett pflanzliches Patty mit veganer weißer Soße, frischer Gurke, Eisbergsalat, Zwiebel, Ketchup und Alfalfa-Sprossen.','Pljeskavica potpuno biljnog podrijetla s veganskim bijelim umakom, svježim krastavcima, ledenom salatom, lukom, ketchupom i alfalfa klicama.','Un burger interamente vegetale con salsa bianca vegana, cetriolo fresco, iceberg, cipolla, ketchup e germogli di erba medica.']},
+    {id:'tropic',first:'Tropic',last:'Thunder',tag:'special',tone:'special',ings:['beef180','smokedcheese','bacon','spicymayo','onion','pineapple','rocket','bbq'],desc:['180g of beef with smoked cheese, bacon, grilled pineapple, rocket, spicy mayo and bbq sauce.','180g Rindfleisch mit Räucherkäse, Bacon, gegrillter Ananas, Rucola, scharfer Mayo und BBQ-Soße.','180g junetine s dimljenim sirom, pancetom, ananasom s roštilja, rukolom, začinjenom majonezom i bbq umakom.','180g di manzo con formaggio affumicato, pancetta, ananas grigliato, rucola, maionese piccante e salsa bbq.']}
+  ];
+
+  let lang='en', LI=0;
+  function t(k,vars){
+    const row=T[k]; let s=row?(row[LI]??row[0]):k;
+    if(vars) s=s.replace(/\{(\w+)\}/g,(m,v)=>vars[v]);
+    return s;
+  }
+  const cap=s=>s.charAt(0).toUpperCase()+s.slice(1);
+  const ingList=(b,li)=>b.ings.map(k=>ING[k][li]);
+  const origLine=b=>cap(ingList(b,2).join(', '));
+  function guests(n){
+    if(lang==='de') return n+(n===1?' Gast':' Gäste');
+    if(lang==='it') return n+(n===1?' ospite':' ospiti');
+    if(lang==='hr'){ const m10=n%10,m100=n%100; return n+(m10===1&&m100!==11?' osoba':(m10>=2&&m10<=4&&(m100<12||m100>14)?' osobe':' osoba')); }
+    return n+(n===1?' guest':' guests');
+  }
+  const langHooks=[];
+  function applyLang(l,animate){
+    if(!LANGS.includes(l)) l='en';
+    const swap=()=>{
+      lang=l; LI=LANGS.indexOf(l);
+      document.documentElement.lang=l;
+      document.querySelectorAll('[data-i18n]').forEach(el=>{el.textContent=t(el.dataset.i18n)});
+      document.querySelectorAll('[data-i18n-html]').forEach(el=>{el.innerHTML=t(el.dataset.i18nHtml)});
+      document.querySelectorAll('[data-i18n-ph]').forEach(el=>{el.placeholder=t(el.dataset.i18nPh)});
+      document.querySelectorAll('[data-i18n-aria]').forEach(el=>{el.setAttribute('aria-label',t(el.dataset.i18nAria))});
+      document.title=t('meta.title');
+      const md=document.querySelector('meta[name="description"]'); if(md) md.content=t('meta.desc');
+      document.querySelectorAll('[data-lang]').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.lang===l)));
+      document.getElementById('langSw').style.setProperty('--li',LI);
+      langHooks.forEach(fn=>fn());
+    };
+    try{localStorage.setItem('burgerija_lang',l)}catch(e){}
+    try{const u=new URL(location.href); u.searchParams.set('lang',l); history.replaceState(null,'',u)}catch(e){}
+    if(animate && !REDUCED){
+      document.getElementById('langSw').style.setProperty('--li',LANGS.indexOf(l));
+      document.body.classList.add('lang-swap');
+      setTimeout(()=>{ swap(); requestAnimationFrame(()=>requestAnimationFrame(()=>document.body.classList.remove('lang-swap'))); },280);
+    } else swap();
+  }
+  function initialLang(){
+    try{const q=new URL(location.href).searchParams.get('lang'); if(LANGS.includes(q)) return q}catch(e){}
+    try{const s=localStorage.getItem('burgerija_lang'); if(LANGS.includes(s)) return s}catch(e){}
+    for(const n of (navigator.languages||[navigator.language||'en'])){ const p=String(n).slice(0,2).toLowerCase(); if(LANGS.includes(p)) return p; if(p==='bs'||p==='sr'||p==='sl') return 'hr'; }
+    return 'en';
+  }
+  document.querySelectorAll('[data-lang]').forEach(b=>b.addEventListener('click',()=>{ if(b.dataset.lang!==lang) applyLang(b.dataset.lang,true); }));
+
+  // ================= NAV =================
   const header=document.getElementById('header');
   let lastY=scrollY, ticking=false;
   function onScroll(){
     const y=scrollY;
     header.classList.toggle('scrolled',y>40);
-    if(y>140 && y>lastY){ header.classList.add('hide'); }
-    else if(y<lastY || y<=140){ header.classList.remove('hide'); }
+    if(!document.body.classList.contains('menu-open')){
+      if(y>160 && y>lastY+4) header.classList.add('hide');
+      else if(y<lastY-4 || y<=160) header.classList.remove('hide');
+    }
     lastY=y; ticking=false;
   }
   addEventListener('scroll',()=>{ if(!ticking){ requestAnimationFrame(onScroll); ticking=true; } },{passive:true});
-  const mm=document.getElementById('mobileMenu'), burgerBtn=document.getElementById('burger');
-  burgerBtn.onclick=()=>{mm.classList.add('open');burgerBtn.setAttribute('aria-expanded','true')};
-  const closeMM=()=>{mm.classList.remove('open');burgerBtn.setAttribute('aria-expanded','false')};
-  document.getElementById('closeM').onclick=closeMM;
-  mm.querySelectorAll('a').forEach(a=>a.onclick=closeMM);
+
+  const navLinks=document.getElementById('navLinks'), hl=document.getElementById('navHl');
+  const links=[...navLinks.querySelectorAll('.nl')];
+  let curLink=null;
+  function moveHl(a){
+    if(!a || !navLinks.offsetParent){ hl.classList.remove('on'); return; }
+    const r=a.getBoundingClientRect(), pr=navLinks.getBoundingClientRect();
+    hl.style.width=r.width+'px';
+    hl.style.transform='translate('+(r.left-pr.left)+'px,-50%)';
+    hl.classList.add('on');
+  }
+  links.forEach(a=>{ a.addEventListener('mouseenter',()=>moveHl(a)); a.addEventListener('focus',()=>moveHl(a)); });
+  navLinks.addEventListener('mouseleave',()=>moveHl(curLink));
+  const secIO=new IntersectionObserver(es=>es.forEach(e=>{
+    if(!e.isIntersecting) return;
+    curLink=links.find(a=>a.getAttribute('href')==='#'+e.target.id)||null;
+    links.forEach(a=>a.classList.toggle('cur',a===curLink));
+    if(!navLinks.matches(':hover')) moveHl(curLink);
+  }),{rootMargin:'-45% 0px -50% 0px'});
+  ['story','menu','ratings','reserve','visit'].forEach(id=>{const s=document.getElementById(id); if(s) secIO.observe(s)});
+  const heroSec=document.querySelector('.hero');
+  new IntersectionObserver(es=>{ if(es[0].isIntersecting){ curLink=null; links.forEach(a=>a.classList.remove('cur')); moveHl(null); } },{rootMargin:'-45% 0px -50% 0px'}).observe(heroSec);
+  addEventListener('resize',()=>moveHl(curLink));
+  langHooks.push(()=>requestAnimationFrame(()=>moveHl(curLink)));
+
+  // hamburger + full-screen glass menu
+  const burgerBtn=document.getElementById('burger'), overlay=document.getElementById('mobileMenu');
+  function setMenu(open){
+    document.body.classList.toggle('menu-open',open);
+    burgerBtn.setAttribute('aria-expanded',String(open));
+    burgerBtn.dataset.i18nAria=open?'nav.close':'nav.open';
+    burgerBtn.setAttribute('aria-label',t(burgerBtn.dataset.i18nAria));
+    overlay.setAttribute('aria-hidden',String(!open));
+    document.documentElement.style.overflow=open?'hidden':'';
+    if(open) header.classList.remove('hide');
+  }
+  burgerBtn.addEventListener('click',()=>setMenu(!document.body.classList.contains('menu-open')));
+  overlay.querySelectorAll('a').forEach(a=>a.addEventListener('click',()=>setMenu(false)));
+  addEventListener('keydown',e=>{ if(e.key==='Escape' && document.body.classList.contains('menu-open')){ setMenu(false); burgerBtn.focus(); } });
+  matchMedia('(min-width:1061px)').addEventListener('change',e=>{ if(e.matches) setMenu(false); });
+
+  // ================= REVEALS =================
   const io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target)}}),{threshold:.12});
   document.querySelectorAll('.reveal').forEach(el=>io.observe(el));
-
-  // current section in nav
-  const navLinks=[...document.querySelectorAll('nav a.nl')];
-  const secIO=new IntersectionObserver(es=>es.forEach(e=>{
-    if(e.isIntersecting){navLinks.forEach(a=>a.classList.toggle('cur',a.getAttribute('href')==='#'+e.target.id))}
-  }),{rootMargin:'-45% 0px -50% 0px'});
-  navLinks.forEach(a=>{const s=document.querySelector(a.getAttribute('href')); if(s) secIO.observe(s)});
 
   // ---- subtle global starfield ----
   (function(){
@@ -741,50 +976,51 @@
   // ================= BURGER SHOWCASE =================
   (function(){
     const DUR=6500;
-    const items=[...document.querySelectorAll('.mb-item')];
-    const data=items.map(el=>{
-      const nameEl=el.querySelector('.mb-name > span');
-      return {
-        id:el.dataset.id,
-        first:el.dataset.first || nameEl.firstChild.textContent.trim(),
-        last:el.dataset.last || 'Burger',
-        tag:el.dataset.tag, tone:el.dataset.tone||'',
-        ings:el.dataset.ings.split('|'),
-        desc:el.querySelector('.mb-en').textContent,
-        hr:el.querySelector('.mb-hr').textContent,
-        img:'assets/img/burgers/'+el.dataset.id+'.webp',
-        thumb:'assets/img/burgers/'+el.dataset.id+'-t.webp'
-      };
-    });
-    const N=data.length, STEP=360/N;
+    const N=MENU.length, STEP=360/N;
+    const img=b=>'assets/img/burgers/'+b.id+'.webp', thumb=b=>'assets/img/burgers/'+b.id+'-t.webp';
+    const fullName=b=>b.first+' '+(b.last||'Burger');
     const sc=document.getElementById('showcase'), info=document.getElementById('scInfo'),
           stage=document.getElementById('scStage'), orbit=document.getElementById('orbit'),
           plate=document.getElementById('plate'), glow=document.getElementById('scGlow'),
           tip=document.getElementById('orbTip'), bar=document.getElementById('scBar'),
-          pauseBtn=document.getElementById('scPause');
+          pauseBtn=document.getElementById('scPause'), list=document.getElementById('mbList');
     const el={tag:document.getElementById('scTag'),name:document.getElementById('scName'),desc:document.getElementById('scDesc'),ings:document.getElementById('scIngs'),hr:document.getElementById('scHr')};
 
-    // preload the big plates so swaps never flash empty
     const cache={};
-    function preload(i){ if(!cache[i]){ const im=new Image(); im.decoding='async'; im.src=data[i].img; cache[i]=im; } return cache[i]; }
+    function preload(i){ if(!cache[i]){ const im=new Image(); im.decoding='async'; im.src=img(MENU[i]); cache[i]=im; } return cache[i]; }
 
-    // orbit thumbnails
-    const thumbs=data.map((d,i)=>{
-      const b=document.createElement('button');
-      b.type='button'; b.className='orb';
-      b.setAttribute('aria-label','Show the '+d.first+' '+d.last);
-      b.innerHTML='<img src="'+d.thumb+'" alt="" decoding="async">';
-      b.addEventListener('click',()=>go(i,true));
-      b.addEventListener('mouseenter',()=>{tip.textContent=d.first+(d.last==='Burger'?'':' '+d.last);tip.classList.add('show');tip.dataset.i=i});
-      b.addEventListener('mouseleave',()=>tip.classList.remove('show'));
-      orbit.appendChild(b); return b;
+    // menu board, rebuilt whenever the language changes
+    let items=[];
+    function renderBoard(){
+      list.innerHTML=MENU.map((b,i)=>{
+        const flag=b.tone?'<span class="mb-flag '+b.tone+'">'+TAG[b.tag][LI]+'</span>':'';
+        const nm=b.last?b.first+' <i>'+b.last+'</i>':b.first+'<i>Burger</i>';
+        return '<li><button type="button" class="mb-item" aria-current="'+(i===idx)+'">'+
+          '<span class="mb-thumb"><img src="'+thumb(b)+'" alt="" loading="lazy" decoding="async"></span>'+
+          '<span><span class="mb-name"><span>'+nm+'</span>'+flag+'</span>'+
+          '<span class="mb-en">'+b.desc[LI]+'</span>'+
+          '<span class="mb-hr" lang="hr">'+origLine(b)+'</span></span></button></li>';
+      }).join('');
+      items=[...list.querySelectorAll('.mb-item')];
+      items.forEach((it,i)=>it.addEventListener('click',()=>{
+        go(i,true);
+        sc.scrollIntoView({behavior:REDUCED?'auto':'smooth',block:'center'});
+      }));
+    }
+
+    const thumbs=MENU.map((b,i)=>{
+      const btn=document.createElement('button');
+      btn.type='button'; btn.className='orb';
+      btn.innerHTML='<img src="'+thumb(b)+'" alt="" decoding="async">';
+      btn.addEventListener('click',()=>go(i,true));
+      btn.addEventListener('mouseenter',()=>{tip.textContent=b.last?b.first+' '+b.last:b.first;tip.classList.add('show');tip.dataset.i=i});
+      btn.addEventListener('mouseleave',()=>tip.classList.remove('show'));
+      orbit.appendChild(btn); return btn;
     });
+    function labelThumbs(){ thumbs.forEach((b,i)=>b.setAttribute('aria-label',t('sc.show')+': '+fullName(MENU[i]))); }
 
     let idx=-1, pos=0, angle=0, target=0, R=0, anchor=180, raf=null;
-    function measure(){
-      const s=stage.clientWidth; R=s*0.44;
-      anchor = innerWidth<=980 ? 90 : 180; // active burger sits beside the text: left on desktop, below on mobile
-    }
+    function measure(){ R=stage.clientWidth*0.44; anchor=innerWidth<=980?90:180; }
     function layout(){
       for(let i=0;i<N;i++){
         const a=(anchor+(i*STEP)+angle)*Math.PI/180;
@@ -805,21 +1041,27 @@
     function splitName(txt,base){
       return [...txt].map((c,k)=>'<span class="ch fx" style="--d:'+(base+k*32)+'">'+(c===' '?'&nbsp;':c)+'</span>').join('');
     }
-    function fill(d){
-      el.tag.textContent=d.tag; el.tag.dataset.tone=d.tone;
-      el.name.setAttribute('aria-label',d.first+' '+d.last);
-      el.name.innerHTML='<span class="row" aria-hidden="true">'+splitName(d.first,60)+'</span><span class="row last" aria-hidden="true">'+splitName(d.last,60+d.first.length*32)+'</span>';
-      el.desc.textContent=d.desc;
-      el.ings.innerHTML=d.ings.map((g,j)=>'<li class="fx" style="--d:'+(360+j*55)+'">'+g+'</li>').join('');
-      el.hr.textContent=d.hr;
+    function fill(b){
+      const last=b.last||'Burger';
+      el.tag.textContent=TAG[b.tag][LI]; el.tag.dataset.tone=b.tone||'';
+      el.name.setAttribute('aria-label',b.first+' '+last);
+      el.name.innerHTML='<span class="row" aria-hidden="true">'+splitName(b.first,60)+'</span><span class="row last" aria-hidden="true">'+splitName(last,60+b.first.length*32)+'</span>';
+      el.desc.textContent=b.desc[LI];
+      el.ings.innerHTML=ingList(b,LI).map((g,j)=>'<li class="fx" style="--d:'+(360+j*55)+'">'+cap(g)+'</li>').join('');
+      el.hr.textContent=origLine(b);
+    }
+    function refill(){
+      if(REDUCED){ fill(MENU[idx]); return; }
+      info.classList.add('out');
+      setTimeout(()=>{ fill(MENU[idx]); info.classList.remove('out'); info.classList.add('pre'); void info.offsetWidth; info.classList.remove('pre'); },230);
     }
     function swapPlate(i,first){
-      const img=preload(i).cloneNode();
-      img.className='pl-img'+(first||REDUCED?'':' enter');
-      img.alt=data[i].first+' '+data[i].last;
+      const im=preload(i).cloneNode();
+      im.className='pl-img'+(first||REDUCED?'':' enter');
+      im.alt=fullName(MENU[i]);
       [...plate.querySelectorAll('.pl-img')].forEach(o=>{ o.classList.add('leave'); setTimeout(()=>o.remove(),800); });
-      plate.appendChild(img);
-      if(!first && !REDUCED){ void img.offsetWidth; requestAnimationFrame(()=>img.classList.remove('enter')); }
+      plate.appendChild(im);
+      if(!first && !REDUCED){ void im.offsetWidth; requestAnimationFrame(()=>im.classList.remove('enter')); }
       glow.classList.remove('flare'); void glow.offsetWidth; if(!REDUCED) glow.classList.add('flare');
     }
     function go(i,user){
@@ -830,15 +1072,11 @@
       else pos=i;
       idx=i; target=-pos*STEP; if(first) angle=target;
       spin();
-      thumbs.forEach((t,k)=>t.classList.toggle('on',k===i));
-      items.forEach((t,k)=>t.setAttribute('aria-current',k===i?'true':'false'));
+      thumbs.forEach((b,k)=>b.classList.toggle('on',k===i));
+      items.forEach((b,k)=>b.setAttribute('aria-current',k===i?'true':'false'));
       swapPlate(i,first);
       preload((i+1)%N); preload((i-1+N)%N);
-      if(first||REDUCED){ fill(data[i]); }
-      else{
-        info.classList.add('out');
-        setTimeout(()=>{ fill(data[i]); info.classList.remove('out'); info.classList.add('pre'); void info.offsetWidth; info.classList.remove('pre'); },230);
-      }
+      if(first) fill(MENU[i]); else refill();
       restart();
     }
 
@@ -853,13 +1091,13 @@
     function sync(){ sc.classList.toggle('paused',!running()); }
     bar.style.setProperty('--dur',DUR+'ms');
     bar.addEventListener('animationend',()=>go(idx+1,false));
+    function labelPause(){ pauseBtn.textContent=userPaused?t('sc.play'):t('sc.pause'); pauseBtn.setAttribute('aria-pressed',String(userPaused)); }
     function setPaused(p){
-      userPaused=p; pauseBtn.textContent=p?'Play':'Pause'; pauseBtn.setAttribute('aria-pressed',String(p));
+      userPaused=p; labelPause();
       if(p) bar.classList.remove('run'); else restart();
       sync();
     }
     pauseBtn.addEventListener('click',()=>setPaused(!userPaused));
-    if(REDUCED){ pauseBtn.textContent='Play'; pauseBtn.setAttribute('aria-pressed','true'); }
     stage.addEventListener('mouseenter',()=>{hover=true;sync()});
     stage.addEventListener('mouseleave',()=>{hover=false;sync();plate.style.transform=''});
     sc.addEventListener('focusin',()=>{hover=true;sync()});
@@ -870,12 +1108,10 @@
     document.getElementById('scPrev').addEventListener('click',()=>go(idx-1,true));
     document.getElementById('scNext').addEventListener('click',()=>go(idx+1,true));
     sc.addEventListener('keydown',e=>{
-      if(e.target.closest('.mb-item')) return;
       if(e.key==='ArrowRight'){e.preventDefault();go(idx+1,true)}
       if(e.key==='ArrowLeft'){e.preventDefault();go(idx-1,true)}
     });
 
-    // swipe the plate on touch screens
     let sx=null, sy=null;
     stage.addEventListener('pointerdown',e=>{ if(e.target.closest('.orb')) return; sx=e.clientX; sy=e.clientY; });
     stage.addEventListener('pointerup',e=>{
@@ -884,7 +1120,6 @@
       if(Math.abs(dx)>40 && Math.abs(dx)>Math.abs(dy)) go(idx+(dx<0?1:-1),true);
     });
 
-    // gentle 3D tilt of the plate under the cursor
     if(!REDUCED && matchMedia('(hover:hover)').matches){
       stage.addEventListener('mousemove',e=>{
         const r=stage.getBoundingClientRect();
@@ -893,18 +1128,15 @@
       });
     }
 
-    // menu board rows put their burger on the plate
-    items.forEach((it,i)=>it.addEventListener('click',()=>{
-      go(i,true);
-      sc.scrollIntoView({behavior:REDUCED?'auto':'smooth',block:'center'});
-    }));
+    langHooks.push(()=>{ renderBoard(); labelThumbs(); labelPause(); if(idx>=0){ fill(MENU[idx]); if(!REDUCED){ info.classList.add('pre'); void info.offsetWidth; info.classList.remove('pre'); } } });
 
     new ResizeObserver(()=>{ measure(); layout(); }).observe(stage);
     measure();
+    renderBoard(); labelThumbs(); labelPause();
     go(0,false);
   })();
 
-  // ---- RESERVATION SYSTEM (client-side demo availability) ----
+  // ================= RESERVATION (client-side demo availability) =================
   (function(){
     const SEATS_PER_SLOT = 20;
     const OPEN_HOUR = 12, LAST_SEATING = 22;
@@ -913,15 +1145,22 @@
           slotsEl=document.getElementById('rSlots'),
           msgEl=document.getElementById('rMsg'),
           confirmBtn=document.getElementById('rConfirm');
-    let selected=null;
+    let selected=null, msg={key:null,vars:null,cls:''};
 
     const today=new Date(); const iso=d=>d.toISOString().slice(0,10);
     const max=new Date(today); max.setDate(max.getDate()+60);
     dateEl.min=iso(today); dateEl.max=iso(max); dateEl.value=iso(today);
+    const fmtDate=(s,opts)=>new Date(s+'T00:00:00').toLocaleDateString(LOCALE[lang],opts);
+
+    function say(key,vars,cls){ msg={key,vars,cls:cls||''}; msgEl.className='res-msg'+(cls?' '+cls:''); msgEl.textContent=t(key,vars); }
+    function partyOptions(){
+      const v=partyEl.value||'2';
+      partyEl.innerHTML=Array.from({length:10},(_,k)=>'<option value="'+(k+1)+'">'+guests(k+1)+'</option>').join('');
+      partyEl.value=v;
+    }
 
     function hash(str){let h=2166136261;for(let i=0;i<str.length;i++){h^=str.charCodeAt(i);h=Math.imul(h,16777619)}return (h>>>0)}
     function rng(seed){return function(){seed=Math.imul(seed^(seed>>>15),seed|1);seed^=seed+Math.imul(seed^(seed>>>7),seed|61);return ((seed^(seed>>>14))>>>0)/4294967296}}
-
     function localBookings(){try{return JSON.parse(localStorage.getItem('burgerija_bookings')||'[]')}catch(e){return []}}
     function saveBooking(b){try{const a=localBookings();a.push(b);localStorage.setItem('burgerija_bookings',JSON.stringify(a))}catch(e){}}
 
@@ -938,29 +1177,29 @@
     }
 
     function render(){
-      selected=null;
+      const keep=selected; selected=null;
       const dateStr=dateEl.value, party=parseInt(partyEl.value);
       slotsEl.innerHTML='';
-      if(!dateStr){msgEl.textContent='Choose a date to see availability.';return}
-      const isToday=dateStr===iso(today); const nowHr=new Date().getHours();
+      if(!dateStr){say('res.chooseDate');return}
+      const isToday=dateStr===iso(today); const now=new Date();
       let anyOpen=false;
       for(let h=OPEN_HOUR;h<=LAST_SEATING;h++){
         for(const m of [0,30]){
           if(h===LAST_SEATING&&m===30)continue;
           const time=String(h).padStart(2,'0')+':'+String(m).padStart(2,'0');
-          const past=isToday&&(h<nowHr||(h===nowHr&&m<=new Date().getMinutes()));
+          const past=isToday&&(h<now.getHours()||(h===now.getHours()&&m<=now.getMinutes()));
           const left=Math.max(0,SEATS_PER_SLOT-seatsTaken(dateStr,time));
           const full=past||left<party;
           if(!full)anyOpen=true;
           const el=document.createElement('div');
           el.className='slot'+(full?' full':'');
-          el.innerHTML='<div class="t">'+time+'</div><div class="s">'+(past?'closed':(left+' seats'))+'</div>';
-          if(!full)el.onclick=()=>{document.querySelectorAll('.slot').forEach(s=>s.classList.remove('sel'));el.classList.add('sel');selected={date:dateStr,time:time,party:party};msgEl.className='res-msg ok';msgEl.textContent='Selected '+time+' for '+party+' on '+new Date(dateStr+'T00:00:00').toLocaleDateString(undefined,{weekday:'long',day:'numeric',month:'long'})+'. Add your details and confirm.'};
+          el.innerHTML='<div class="t">'+time+'</div><div class="s">'+(past?t('res.closed'):t('res.seats',{n:left}))+'</div>';
+          const pick=()=>{slotsEl.querySelectorAll('.slot').forEach(s=>s.classList.remove('sel'));el.classList.add('sel');selected={date:dateStr,time:time,party:party};say('res.selected',{time,party:guests(party),date:fmtDate(dateStr,{weekday:'long',day:'numeric',month:'long'})},'ok')};
+          if(!full){ el.onclick=pick; if(keep&&keep.date===dateStr&&keep.time===time&&keep.party===party) pick(); }
           slotsEl.appendChild(el);
         }
       }
-      msgEl.className='res-msg'+(anyOpen?'':' warn');
-      msgEl.textContent=anyOpen?('Tap an available seating for '+party+(party>1?' guests.':' guest.')):'No seatings fit '+party+' guests that day. Try another date or a smaller party.';
+      if(!selected){ if(anyOpen) say('res.tap',{party:guests(party)}); else say('res.nofit',{party:guests(party)},'warn'); }
     }
 
     function submitReservation(b){
@@ -973,28 +1212,31 @@
       const name=document.getElementById('rName').value.trim();
       const phone=document.getElementById('rPhone').value.trim();
       const email=document.getElementById('rEmail').value.trim();
-      if(!selected){msgEl.className='res-msg warn';msgEl.textContent='Please pick an available seating first.';return}
-      if(!name||!phone){msgEl.className='res-msg warn';msgEl.textContent='Please add your name and phone so we can confirm.';return}
-      if(email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)){msgEl.className='res-msg warn';msgEl.textContent='That email address looks incomplete. Check it or leave it empty.';return}
+      if(!selected){say('res.pickFirst',null,'warn');return}
+      if(!name||!phone){say('res.needNP',null,'warn');return}
+      if(email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)){say('res.badEmail',null,'warn');return}
       const left=Math.max(0,SEATS_PER_SLOT-seatsTaken(selected.date,selected.time));
-      if(left<selected.party){msgEl.className='res-msg warn';msgEl.textContent='Sorry, that seating just filled up. Please choose another.';render();return}
-      const booking={...selected,name,phone,email,placed:new Date().toISOString()};
+      if(left<selected.party){say('res.filled',null,'warn');render();return}
+      const booking={...selected,name,phone,email,lang,placed:new Date().toISOString()};
       submitReservation(booking);
-      const d=new Date(selected.date+'T00:00:00').toLocaleDateString(undefined,{weekday:'long',day:'numeric',month:'long',year:'numeric'});
+      const d=fmtDate(selected.date,{weekday:'long',day:'numeric',month:'long',year:'numeric'});
       const esc=s=>s.replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
       document.getElementById('resForm').innerHTML=
         '<div class="res-success"><div class="tick">✓</div>'+
-        '<h3>Table requested</h3>'+
-        '<p class="lede" style="margin-inline:auto">Thanks, '+esc(name.split(' ')[0])+'. Your seating is held.</p>'+
-        '<div class="det">Date: <span>'+d+'</span><br>Time: <span>'+selected.time+'</span><br>Guests: <span>'+selected.party+'</span><br>Contact: <span>'+esc(phone)+'</span></div>'+
-        '<p class="res-note" style="border:0">We\'ll confirm by phone during our seasonal hours. Need to change it? Call <a href="tel:+385955149703" style="color:var(--ember)">+385 95 514 9703</a>.</p>'+
+        '<h3>'+t('res.okH')+'</h3>'+
+        '<p class="lede" style="margin-inline:auto">'+t('res.okThanks',{name:esc(name.split(' ')[0])})+'</p>'+
+        '<div class="det">'+t('res.date')+': <span>'+d+'</span><br>'+t('res.okTime')+': <span>'+selected.time+'</span><br>'+t('res.guests')+': <span>'+selected.party+'</span><br>'+t('res.okContact')+': <span>'+esc(phone)+'</span></div>'+
+        '<p class="res-note" style="border:0">'+t('res.okNote')+' <a href="tel:+385955149703" style="color:var(--ember)">+385 95 514 9703</a>.</p>'+
         '</div>';
     };
 
     dateEl.addEventListener('change',render);
     partyEl.addEventListener('change',render);
-    render();
+    langHooks.push(()=>{ if(document.body.contains(partyEl)){ partyOptions(); render(); } });
+    partyOptions(); render();
   })();
+
+  applyLang(initialLang(),false);
 </script>
 </body>
 </html>
