@@ -320,24 +320,39 @@
   .sides-pic:hover .seal svg{animation-duration:9s}
   .sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
 
-  /* RATINGS */
-  .carousel{margin:54px 0 0;overflow:hidden;position:relative;-webkit-mask:linear-gradient(90deg,transparent,#000 6%,#000 94%,transparent);mask:linear-gradient(90deg,transparent,#000 6%,#000 94%,transparent)}
-  .track{display:flex;gap:18px;width:max-content;animation:scrollX 36s linear infinite}
-  .carousel:hover .track{animation-play-state:paused}
-  .track figure{width:clamp(280px,32vw,400px);aspect-ratio:600/448;border:1px solid var(--line);overflow:hidden;flex:0 0 auto;position:relative}
-  .track img{width:100%;height:100%;object-fit:cover;transition:transform .6s var(--ease)}
-  .track figure:hover img{transform:scale(1.06)}
-  @keyframes scrollX{to{transform:translateX(calc(-50% - 9px))}}
-  .rband{display:flex;flex-wrap:wrap;justify-content:center;gap:clamp(24px,5vw,70px);margin-top:50px;padding:30px 0;border-block:1px solid var(--line)}
-  .rband .item{text-align:center}
-  .rband .v{font-family:var(--display);font-size:32px;color:var(--gold)}
-  .rband .stars{color:var(--gold);letter-spacing:3px;font-size:14px;margin-top:2px}
-  .rband .src{font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--dim);margin-top:6px}
-  .rlinks{display:flex;flex-wrap:wrap;justify-content:center;gap:14px clamp(24px,4vw,48px);margin-top:36px}
-  .rlinks a{position:relative;font-family:var(--display);font-size:clamp(18px,1.6vw,21px);padding:4px 0 6px;color:var(--cream);background:linear-gradient(var(--ember),var(--ember)) no-repeat 0 100%/100% 1px;transition:color .3s,background-size .5s var(--ease)}
-  .rlinks a::after{content:"\2197";display:inline-block;margin-left:8px;font-family:var(--body);font-size:.75em;color:var(--ember);transition:transform .45s var(--spring)}
-  .rlinks a:hover{color:var(--ember);background-size:0 1px;background-position:100% 100%}
-  .rlinks a:hover::after{transform:translate(3px,-3px)}
+  /* RATINGS: big score, rolling praise, scoreboard */
+  #ratings{text-align:left;overflow:hidden}
+  #ratings::before{content:"";position:absolute;left:-10%;top:10%;width:min(760px,90vw);aspect-ratio:1;background:radial-gradient(circle,rgba(245,196,81,.09),transparent 62%);pointer-events:none}
+  .rv{position:relative;display:grid;grid-template-columns:minmax(0,.85fr) minmax(0,1.15fr);gap:clamp(40px,7vw,110px);align-items:center}
+  .rv-num{font-family:var(--display);font-weight:300;font-size:clamp(120px,17vw,230px);line-height:.82;letter-spacing:-.05em;color:var(--cream);font-variant-numeric:tabular-nums}
+  .rv-stars{position:relative;width:clamp(170px,19vw,240px);aspect-ratio:5/1;margin-top:clamp(18px,2vw,28px);background:rgba(244,237,226,.12);-webkit-mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M12 2.2l2.9 6.3 6.9.7-5.2 4.6 1.5 6.8L12 17.1l-6.1 3.5 1.5-6.8L2.2 9.2l6.9-.7z'/%3E%3C/svg%3E") repeat-x 0 0/20% 100%;mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M12 2.2l2.9 6.3 6.9.7-5.2 4.6 1.5 6.8L12 17.1l-6.1 3.5 1.5-6.8L2.2 9.2l6.9-.7z'/%3E%3C/svg%3E") repeat-x 0 0/20% 100%}
+  .rv-stars-on{position:absolute;inset:0;background:linear-gradient(90deg,var(--gold),var(--ember));transform-origin:left;transform:scaleX(0);transition:transform 1.6s cubic-bezier(.32,.72,0,1) .2s}
+  .rv-score.in .rv-stars-on{transform:scaleX(.94)}
+  .rv-sub{margin-top:18px;font-size:13px;letter-spacing:.06em;color:var(--dim);max-width:28ch}
+
+  .rv-head{font-family:var(--display);font-weight:300;font-size:clamp(32px,4vw,56px);line-height:1.08;letter-spacing:-.02em;margin-bottom:clamp(30px,4vw,50px)}
+  .rv-lead{display:block}
+  .rv-roll{position:relative;display:grid;overflow:hidden;padding-bottom:.12em;margin-bottom:-.12em}
+  .rv-roll span{grid-area:1/1;font-style:italic;color:var(--ember);white-space:nowrap;transform:translateY(105%);opacity:0;transition:transform .8s cubic-bezier(.32,.72,0,1),opacity .5s var(--ease)}
+  .rv-roll span.on{transform:none;opacity:1}
+  .rv-roll span.out{transform:translateY(-105%);opacity:0}
+
+  .rv-board{list-style:none;border-top:1px solid rgba(240,129,58,.3)}
+  .rv-board a{display:grid;grid-template-columns:minmax(0,1fr) auto auto 1fr auto;align-items:center;gap:18px;padding:20px 8px;border-bottom:1px solid rgba(244,237,226,.07);transition:background .4s var(--ease)}
+  .rv-board a:hover{background:rgba(244,237,226,.03)}
+  .rv-src{font-family:var(--display);font-size:clamp(20px,1.8vw,24px);display:flex;flex-direction:column}
+  .rv-src em{font-family:var(--body);font-style:normal;font-size:10.5px;letter-spacing:.16em;text-transform:uppercase;color:var(--gold);margin-top:3px}
+  .rv-mini{width:86px;aspect-ratio:5/1;background:linear-gradient(90deg,var(--gold) var(--f),rgba(244,237,226,.14) var(--f));-webkit-mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M12 2.2l2.9 6.3 6.9.7-5.2 4.6 1.5 6.8L12 17.1l-6.1 3.5 1.5-6.8L2.2 9.2l6.9-.7z'/%3E%3C/svg%3E") repeat-x 0 0/20% 100%;mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M12 2.2l2.9 6.3 6.9.7-5.2 4.6 1.5 6.8L12 17.1l-6.1 3.5 1.5-6.8L2.2 9.2l6.9-.7z'/%3E%3C/svg%3E") repeat-x 0 0/20% 100%}
+  .rv-val{font-family:var(--display);font-size:22px;color:var(--cream);font-variant-numeric:tabular-nums}
+  .rv-count{font-size:13px;color:var(--dim)}
+  .rv-go{color:var(--ember);font-size:16px;transition:transform .45s var(--spring)}
+  .rv-board a:hover .rv-go{transform:translate(3px,-3px)}
+  @media(max-width:880px){
+    .rv{grid-template-columns:1fr;gap:34px}
+    .rv-board a{grid-template-columns:1fr auto auto;row-gap:6px;gap:6px 14px}
+    .rv-mini{grid-column:1;grid-row:2}
+    .rv-count{grid-column:2/4;grid-row:2;text-align:right}
+  }
 
   /* VISIT */
   #visit{position:relative;overflow:hidden;background:radial-gradient(120% 80% at 50% 120%,rgba(240,129,58,.22),transparent 55%),linear-gradient(180deg,#0a0d18,#0b0f1a)}
@@ -418,8 +433,8 @@
 
   @media(prefers-reduced-motion:reduce){
     html{scroll-behavior:auto}
-    body::after,.sc-glow,.sc-track,.sc-track::after,.track{animation:none}
-    .reveal,.sc-info .fx,.pl-img,.st-img{transition:none}
+    body::after,.sc-glow,.sc-track,.sc-track::after{animation:none}
+    .reveal,.sc-info .fx,.pl-img,.st-img,.rv-stars-on,.rv-roll span{transition:none}
     .st-statement .w{opacity:1!important;animation:none!important;filter:none!important}
     .st-rail span{transform:scaleY(1)!important;animation:none!important}
     .st-bg img{animation:none!important;transform:none}
@@ -604,32 +619,34 @@
 
 <!-- RATINGS -->
 <section id="ratings">
-  <div class="wrap">
-    <div class="reveal">
-      <h2 data-i18n="rev.h2">Guests love it</h2>
+  <div class="wrap rv">
+    <div class="rv-score reveal" id="rvScore">
+      <div class="rv-num" aria-hidden="true"><span id="rvNum">4.7</span></div>
+      <div class="rv-stars" role="img" data-i18n-aria="rev.starsAria" aria-label="4.7 out of 5"><span class="rv-stars-on" id="rvStars"></span></div>
+      <p class="rv-sub" data-i18n="rev.sub">Average across more than 1,000 guest ratings</p>
     </div>
-  </div>
-  <div class="carousel reveal d1">
-    <div class="track">
-      <figure><img src="assets/img/sunset-burger.jpg" alt="Burger and fries at sunset on the Poreč seafront" loading="lazy" decoding="async"></figure>
-      <figure><img src="assets/img/fries-sea.jpg" alt="Baskets of golden fries with the Adriatic behind" loading="lazy" decoding="async"></figure>
-      <figure><img src="assets/img/bacon-tray.jpg" alt="Loaded bacon burger on a tray" loading="lazy" decoding="async"></figure>
-      <figure><img src="assets/img/bura-beer.jpg" alt="Bura Brew craft beer at twilight" loading="lazy" decoding="async"></figure>
-      <figure aria-hidden="true"><img src="assets/img/sunset-burger.jpg" alt="" loading="lazy" decoding="async"></figure>
-      <figure aria-hidden="true"><img src="assets/img/fries-sea.jpg" alt="" loading="lazy" decoding="async"></figure>
-      <figure aria-hidden="true"><img src="assets/img/bacon-tray.jpg" alt="" loading="lazy" decoding="async"></figure>
-      <figure aria-hidden="true"><img src="assets/img/bura-beer.jpg" alt="" loading="lazy" decoding="async"></figure>
-    </div>
-  </div>
-  <div class="wrap">
-    <div class="rband reveal">
-      <div class="item"><div class="v">4.7</div><div class="stars">★★★★★</div><div class="src">Google</div></div>
-      <div class="item"><div class="v">4.7</div><div class="stars">★★★★★</div><div class="src">Restaurant Guru</div></div>
-    </div>
-    <div class="rlinks reveal d1">
-      <a href="https://www.google.com/maps/search/?api=1&query=BURGERiJA+Burger+Bar+Pore%C4%8D" target="_blank" rel="noopener" data-i18n="rev.google">Read reviews on Google</a>
-      <a href="https://www.tripadvisor.com/Restaurant_Review-g303829-d12667752-Reviews-Burgerija-Porec_Istria.html" target="_blank" rel="noopener">Tripadvisor</a>
-      <a href="https://restaurantguru.com/Burger-bar-Burgerija-Porec" target="_blank" rel="noopener">Restaurant Guru</a>
+    <div class="rv-main">
+      <h2 class="rv-head reveal" id="rvHead"><span class="rv-lead" data-i18n="rev.lead">Guests keep talking about</span><span class="rv-roll" id="rvRoll" aria-hidden="true"></span></h2>
+      <ul class="rv-board reveal d1">
+        <li><a href="https://www.google.com/maps/search/?api=1&amp;query=BURGERiJA+Burger+Bar+Pore%C4%8D" target="_blank" rel="noopener" data-src="Google">
+          <span class="rv-src">Google</span>
+          <span class="rv-mini" style="--f:94%" aria-hidden="true"></span>
+          <span class="rv-val">4.7</span>
+          <span class="rv-count" data-count="852"></span>
+          <span class="rv-go" aria-hidden="true">&#8599;</span></a></li>
+        <li><a href="https://www.tripadvisor.com/Restaurant_Review-g303829-d12667752-Reviews-Burgerija-Porec_Istria.html" target="_blank" rel="noopener" data-src="Tripadvisor">
+          <span class="rv-src">Tripadvisor <em>Travellers' Choice</em></span>
+          <span class="rv-mini" style="--f:94%" aria-hidden="true"></span>
+          <span class="rv-val">4.7</span>
+          <span class="rv-count" data-count="95"></span>
+          <span class="rv-go" aria-hidden="true">&#8599;</span></a></li>
+        <li><a href="https://www.facebook.com/BURGERIJA/" target="_blank" rel="noopener" data-src="Facebook">
+          <span class="rv-src">Facebook</span>
+          <span class="rv-mini" style="--f:98%" aria-hidden="true"></span>
+          <span class="rv-val">4.9</span>
+          <span class="rv-count" data-count="55"></span>
+          <span class="rv-go" aria-hidden="true">&#8599;</span></a></li>
+      </ul>
     </div>
   </div>
 </section>
@@ -766,14 +783,17 @@
     'sides.extras':['Extras','Extras','Dodaci','Extra'],
     'sides.extras.p':['Add bacon, cheddar or an extra house sauce to any burger.','Bacon, Cheddar oder eine extra Haussoße zu jedem Burger.','Dodajte pancetu, cheddar ili dodatni umak na bilo koji burger.','Aggiungi pancetta, cheddar o una salsa della casa in più a qualsiasi burger.'],
     'sides.sizes':['Sizes','Größen','Veličine','Formati'],
-    'sides.sizes.p':['Most burgers come in more than one size. Ask at the counter which one fits your appetite.','Die meisten Burger gibt es in mehreren Größen. Fragen Sie an der Theke, welche zu Ihrem Hunger passt.','Većina burgera dolazi u više veličina. Pitajte na pultu koja odgovara vašem apetitu.','Quasi tutti i burger sono disponibili in più formati. Chiedi al banco quello giusto per la tua fame.'],
+    'sides.sizes.p':['Most burgers come small, medium or with a double patty. Pick the one that fits your appetite.','Die meisten Burger gibt es klein, mittel oder mit doppeltem Patty. Ganz nach Hunger.','Većina burgera dolazi kao mali, srednji ili s duplom pljeskavicom. Po vašem apetitu.','Quasi tutti i burger sono disponibili piccoli, medi o con doppio hamburger. Secondo la tua fame.'],
     'ethos.1':['100% Fresh','100% frisch','100% svježe','100% fresco'],
     'ethos.2':['Handmade Patties','Handgeformte Patties','Ručno rađene pljeskavice','Hamburger fatti a mano'],
     'ethos.3':['Fresh-Baked Buns Daily','Täglich frische Brötchen','Svježa peciva svaki dan','Panini freschi ogni giorno'],
     'ethos.4':['House Sauces','Hausgemachte Soßen','Domaći umaci','Salse della casa'],
     'ethos.5':['Local Ingredients','Regionale Zutaten','Lokalne namirnice','Ingredienti locali'],
-    'rev.h2':['Guests love it','Gäste lieben es','Gosti ga obožavaju','Gli ospiti lo adorano'],
-    'rev.google':['Read reviews on Google','Bewertungen auf Google','Recenzije na Googleu','Recensioni su Google'],
+    'rev.lead':['Guests keep talking about','Unsere Gäste schwärmen von','Gosti stalno spominju','Gli ospiti parlano sempre'],
+    'rev.topics':[['the burgers','the sunsets','the hand-cut fries','the friendly staff','the craft beer'],['den Burgern','den Sonnenuntergängen','den Pommes','dem freundlichen Team','dem Craft-Bier'],['burgere','zalaske sunca','pomfrit','ljubazno osoblje','craft pivo'],['dei burger','dei tramonti','delle patatine','dello staff gentile','della birra artigianale']],
+    'rev.sub':['Average across more than 1,000 guest ratings','Durchschnitt aus über 1.000 Gästebewertungen','Prosjek više od 1.000 ocjena gostiju','Media di oltre 1.000 valutazioni degli ospiti'],
+    'rev.starsAria':['Rated 4.7 out of 5','Bewertet mit 4,7 von 5','Ocjena 4,7 od 5','Valutazione 4,7 su 5'],
+    'rev.read':['Read the reviews on {src}','Bewertungen auf {src} lesen','Pročitajte recenzije na {src}','Leggi le recensioni su {src}'],
     'res.badge':['Book a Table','Tisch reservieren','Rezervacija','Prenota un tavolo'],
     'res.h2':['Reserve your seafront table','Reservieren Sie Ihren Tisch am Meer','Rezervirajte stol uz more','Prenota il tuo tavolo sul mare'],
     'res.lede':["Pick a date and party size, and we'll show you the open seatings.",'Wählen Sie Datum und Personenzahl, wir zeigen Ihnen die freien Zeiten.','Odaberite datum i broj osoba, a mi ćemo vam pokazati slobodne termine.','Scegli data e numero di persone e ti mostriamo gli orari liberi.'],
@@ -979,6 +999,64 @@
       if(on) requestAnimationFrame(frame);
     }
     new IntersectionObserver(es=>{ const was=on; on=es.some(e=>e.isIntersecting)||false; if(on&&!was) requestAnimationFrame(frame); },{rootMargin:'10% 0px'}).observe(document.getElementById('story'));
+  })();
+
+  // ================= REVIEWS =================
+  (function(){
+    const score=document.getElementById('rvScore'), num=document.getElementById('rvNum'),
+          roll=document.getElementById('rvRoll'), head=document.getElementById('rvHead');
+    const fmt=v=>v.toLocaleString(LOCALE[lang],{minimumFractionDigits:1,maximumFractionDigits:1});
+    function reviewsWord(n){
+      if(lang==='de') return n+' Bewertungen';
+      if(lang==='it') return n+' recensioni';
+      if(lang==='hr'){ const m10=n%10,m100=n%100; return n+(m10>=2&&m10<=4&&(m100<12||m100>14)?' recenzije':' recenzija'); }
+      return n+' reviews';
+    }
+    let counted=false;
+    function countUp(){
+      if(counted) return; counted=true;
+      if(REDUCED){ num.textContent=fmt(4.7); return; }
+      const t0=performance.now(), D=1500;
+      (function step(now){
+        const k=Math.min(1,(now-t0)/D), e=1-Math.pow(1-k,4);
+        num.textContent=fmt(4.7*e);
+        if(k<1) requestAnimationFrame(step);
+      })(t0);
+    }
+    new IntersectionObserver(es=>{ if(es[0].isIntersecting){ score.classList.add('in'); countUp(); } },{threshold:.4}).observe(score);
+
+    // the praised topic rolls through what reviewers mention most
+    let topics=[], ti=0, timer=null;
+    function buildRoll(){
+      topics=T['rev.topics'][LI];
+      roll.innerHTML=topics.map((w,i)=>'<span class="'+(i===ti%topics.length?'on':'')+'">'+w+'</span>').join('');
+      const last=topics.length-1;
+      head.setAttribute('aria-label',t('rev.lead')+' '+topics.slice(0,last).join(', ')+' & '+topics[last]);
+    }
+    function next(){
+      const spans=roll.children, cur=spans[ti%topics.length];
+      ti=(ti+1)%topics.length;
+      const nx=spans[ti];
+      cur.classList.remove('on'); cur.classList.add('out');
+      nx.classList.remove('out'); nx.classList.add('on');
+      setTimeout(()=>cur.classList.remove('out'),800);
+    }
+    if(!REDUCED){
+      new IntersectionObserver(es=>{
+        if(es[0].isIntersecting){ if(!timer) timer=setInterval(next,2400); }
+        else { clearInterval(timer); timer=null; }
+      }).observe(head);
+    }
+
+    langHooks.push(()=>{
+      buildRoll();
+      if(counted) num.textContent=fmt(4.7);
+      document.querySelectorAll('.rv-board a').forEach(a=>{
+        a.setAttribute('aria-label',t('rev.read',{src:a.dataset.src}));
+        a.querySelector('.rv-val').textContent=fmt(parseFloat(a.querySelector('.rv-val').textContent.replace(',','.')));
+        const c=a.querySelector('.rv-count'); c.textContent=reviewsWord(+c.dataset.count);
+      });
+    });
   })();
 
   // circular seal around the fries photo
