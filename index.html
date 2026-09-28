@@ -136,7 +136,6 @@
   .hero-content{position:relative;z-index:2;width:min(1240px,90vw);margin-inline:auto}
   .hero-content>*{max-width:780px}
   .eyebrow{font-size:12px;letter-spacing:.3em;text-transform:uppercase;color:var(--ember);display:inline-flex;align-items:center;gap:10px;opacity:0;transform:translateY(20px);animation:rise 1s var(--ease) .2s forwards}
-  .eyebrow::before{content:"";width:30px;height:1px;background:var(--ember)}
   .hero h1{font-family:var(--display);font-weight:300;font-size:clamp(46px,8vw,104px);line-height:.96;letter-spacing:-.015em;margin:20px 0 0;opacity:0;transform:translateY(28px);animation:rise 1.1s var(--ease) .4s forwards}
   .hero h1 .sub{display:block;font-size:clamp(20px,2.8vw,34px);font-style:italic;color:var(--gold);margin-top:14px;font-weight:300;line-height:1.15;padding-bottom:4px}
   .hero .tag{margin-top:26px;max-width:540px;font-size:clamp(15px,1.5vw,18px);color:var(--cream);opacity:0;transform:translateY(28px);animation:rise 1.1s var(--ease) .62s forwards}
@@ -165,13 +164,52 @@
   .lede{font-size:clamp(15px,1.4vw,17.5px);color:var(--dim);max-width:60ch;margin-inline:auto}
   .lede+.lede{margin-top:18px}
 
-  /* STORY */
-  .story{display:grid;grid-template-columns:1.05fr .95fr;gap:clamp(36px,6vw,80px);align-items:center}
-  .stats{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:38px;max-width:520px;margin-inline:auto}
-  .stat{border:1px solid var(--line);padding:22px 18px;background:var(--bg-2);transition:transform .4s var(--ease),border-color .4s}
-  .stat:hover{border-color:rgba(240,129,58,.5);transform:translateY(-4px)}
-  .stat .n{font-family:var(--display);font-size:32px;color:var(--ember);line-height:1}
-  .stat .l{font-size:12px;letter-spacing:.06em;color:var(--dim);margin-top:8px}
+  /* STORY: scroll-lit statement + pinned chapters */
+  #story{padding:0 0 clamp(90px,13vh,160px);text-align:left}
+  .st-intro{position:relative;min-height:120vh;display:flex;align-items:center;overflow:hidden;view-timeline:--stIntro block}
+  .st-bg{position:absolute;inset:0}
+  .st-bg img{width:100%;height:100%;object-fit:cover;opacity:.5;transform:scale(1.12)}
+  .st-bg::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,var(--bg) 0%,rgba(11,15,26,.35) 38%,rgba(11,15,26,.35) 62%,var(--bg) 100%),radial-gradient(80% 60% at 50% 50%,transparent,rgba(11,15,26,.6))}
+  .st-intro .wrap{position:relative}
+  .st-statement{font-family:var(--display);font-weight:300;font-size:clamp(30px,4.6vw,66px);line-height:1.14;letter-spacing:-.022em;max-width:17em;text-wrap:balance}
+  .st-statement .w{opacity:.16;transition:opacity .25s linear}
+  .st-statement .w.em{font-style:italic;color:var(--ember)}
+
+  .st-chapters{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:clamp(40px,7vw,110px);margin-top:clamp(20px,4vw,60px)}
+  .st-media{position:sticky;top:clamp(92px,12vh,120px);align-self:start}
+  .st-frame{position:relative;width:min(100%,calc((100vh - 170px)*.8));aspect-ratio:4/5;overflow:hidden;border:1px solid var(--line);background:#0d1018}
+  .st-img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;clip-path:inset(100% 0 0 0);transform:scale(1.14);transition:clip-path 1.15s cubic-bezier(.32,.72,0,1),transform 1.8s cubic-bezier(.32,.72,0,1)}
+  .st-img.on{clip-path:inset(0 0 0 0);transform:scale(1)}
+  .st-frame::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,transparent 60%,rgba(11,15,26,.45));pointer-events:none}
+  .st-list{position:relative;padding-left:clamp(28px,3vw,46px);view-timeline:--stList block}
+  .st-rail{position:absolute;left:0;top:12vh;bottom:12vh;width:1px;background:rgba(244,237,226,.1)}
+  .st-rail span{position:absolute;inset:0;background:linear-gradient(var(--ember),var(--gold));transform-origin:top;transform:scaleY(0)}
+  .st-ch{min-height:80vh;display:flex;flex-direction:column;justify-content:center;opacity:.25;transition:opacity .8s var(--ease)}
+  .st-ch.on{opacity:1}
+  .st-ch h3{font-family:var(--display);font-weight:400;font-size:clamp(32px,3.6vw,52px);line-height:1.04;letter-spacing:-.022em;margin-bottom:22px}
+  .st-ch>p{font-size:clamp(15.5px,1.3vw,17.5px);color:var(--dim);max-width:44ch;line-height:1.7}
+  .st-fact{display:flex;align-items:baseline;gap:12px;margin-top:30px;font-size:11.5px;letter-spacing:.16em;text-transform:uppercase;color:rgba(167,163,148,.85)}
+  .st-fact b{font-family:var(--display);font-weight:300;font-style:italic;font-size:22px;letter-spacing:0;text-transform:none;color:var(--ember)}
+  .st-inline{display:none}
+
+  /* scroll-driven animations where the browser has them; JS fills in elsewhere */
+  @supports (animation-timeline: view()){
+    .st-bg img{animation:stSettle linear both;animation-timeline:--stIntro;animation-range:cover 0% cover 100%}
+    .st-statement .w{transition:none;animation:stWord linear both;animation-timeline:--stIntro;animation-range:cover calc(19% + var(--a)*1%) cover calc(24% + var(--a)*1%)}
+    .st-rail span{animation:stRail linear both;animation-timeline:--stList;animation-range:cover 20% cover 80%}
+  }
+  @keyframes stSettle{from{transform:scale(1.28)}to{transform:scale(1)}}
+  @keyframes stWord{from{opacity:.16;filter:blur(3px)}to{opacity:1;filter:blur(0)}}
+  @keyframes stRail{to{transform:scaleY(1)}}
+
+  @media(max-width:880px){
+    .st-intro{min-height:100vh}
+    .st-chapters{grid-template-columns:1fr}
+    .st-media{display:none}
+    .st-ch{min-height:0;opacity:1;padding:34px 0 40px}
+    .st-inline{display:block;width:100%;aspect-ratio:4/3;object-fit:cover;border:1px solid var(--line);margin-bottom:26px}
+    .st-rail{top:0;bottom:0}
+  }
 
   /* parallax photo frame */
   .parallax-frame{position:relative;width:100%;aspect-ratio:4/3;overflow:hidden;border:1px solid var(--line);background:#0d1018}
@@ -366,11 +404,10 @@
     .sc-timer{flex:0 0 120px}
   }
   @media(max-width:880px){
-    .story,.visit-grid,.sides{grid-template-columns:1fr}
+    .visit-grid,.sides{grid-template-columns:1fr}
     .mb-list{grid-template-columns:1fr}
   }
   @media(max-width:560px){
-    .stats{grid-template-columns:1fr}
     .res-row{grid-template-columns:1fr}
     .mb-item{grid-template-columns:52px 1fr;gap:14px;padding-inline:10px 4px}
     .mb-thumb{width:52px;height:52px}
@@ -382,7 +419,10 @@
   @media(prefers-reduced-motion:reduce){
     html{scroll-behavior:auto}
     body::after,.sc-glow,.sc-track,.sc-track::after,.track{animation:none}
-    .reveal,.sc-info .fx,.pl-img{transition:none}
+    .reveal,.sc-info .fx,.pl-img,.st-img{transition:none}
+    .st-statement .w{opacity:1!important;animation:none!important;filter:none!important}
+    .st-rail span{transform:scaleY(1)!important;animation:none!important}
+    .st-bg img{animation:none!important;transform:none}
     .reveal{opacity:1;transform:none}
     .eyebrow,.hero h1,.hero .tag,.chips,.hero-cta{animation:none;opacity:1;transform:none}
   }
@@ -457,22 +497,43 @@
 </section>
 
 <!-- STORY -->
-<section id="story">
-  <div class="wrap story">
-    <div class="reveal">
-      <h2 data-i18n="story.h2">Poreč's original burger bar</h2>
-      <p class="lede" data-i18n="story.p1">It started with a simple idea on the Adriatic coast: a real burger, made by hand, served where the sea meets the sunset. Burgerija became the first burger bar in Poreč, and quickly the place locals and travellers return to, season after season.</p>
-      <p class="lede" data-i18n="story.p2">Everything is built fresh. Patties pressed by hand, buns baked daily, sauces made in-house, and ingredients sourced locally across Istria. Nothing frozen, nothing shortcut. Just fire, craft, and a table by the water.</p>
-      <div class="stats">
-        <div class="stat"><div class="n">#1</div><div class="l" data-i18n="stat.first">First burger bar in Poreč</div></div>
-        <div class="stat"><div class="n">4.7★</div><div class="l" data-i18n="stat.google">Google rating</div></div>
-        <div class="stat"><div class="n">100%</div><div class="l" data-i18n="stat.fresh">Fresh, never frozen</div></div>
+<section id="story" class="story">
+  <h2 class="sr-only" data-i18n="story.h2">Poreč's original burger bar</h2>
+  <div class="st-intro" id="stIntro">
+    <div class="st-bg" aria-hidden="true"><img src="assets/img/story/porec-dusk.webp" alt="" loading="lazy" decoding="async"></div>
+    <div class="wrap">
+      <p class="st-statement" id="stStatement"></p>
+    </div>
+  </div>
+
+  <div class="wrap st-chapters">
+    <div class="st-media" aria-hidden="true">
+      <div class="st-frame">
+        <img class="st-img on" src="assets/img/story/first.webp" alt="" loading="lazy" decoding="async" style="object-position:30% 60%">
+        <img class="st-img" src="assets/img/story/handmade.webp" alt="" loading="lazy" decoding="async" style="object-position:72% 50%">
+        <img class="st-img" src="assets/img/story/by-the-water.webp" alt="" loading="lazy" decoding="async" style="object-position:55% 50%">
       </div>
     </div>
-    <div class="reveal d1">
-      <div class="parallax-frame">
-        <img class="parallax-img" src="assets/img/story.png" alt="Burgerija burger and fries at sunset on the Poreč seafront" loading="lazy" decoding="async">
-      </div>
+    <div class="st-list" id="stList">
+      <div class="st-rail" aria-hidden="true"><span id="stRail"></span></div>
+      <article class="st-ch on">
+        <img class="st-inline" src="assets/img/story/first.webp" alt="" loading="lazy" decoding="async">
+        <h3 data-i18n="story.c1h">The first in Poreč</h3>
+        <p data-i18n="story.c1p">Burgerija opened as the town's first burger bar, right on the seafront promenade. Locals came first, then the travellers, and both keep coming back season after season.</p>
+        <p class="st-fact"><b>#1</b><span data-i18n="stat.first">First burger bar in Poreč</span></p>
+      </article>
+      <article class="st-ch">
+        <img class="st-inline" src="assets/img/story/handmade.webp" alt="" loading="lazy" decoding="async">
+        <h3 data-i18n="story.c2h">Made the slow way</h3>
+        <p data-i18n="story.p2">Everything is built fresh. Patties pressed by hand, buns baked daily, sauces made in-house, and ingredients sourced locally across Istria. Nothing frozen, nothing shortcut. Just fire, craft, and a table by the water.</p>
+        <p class="st-fact"><b>100%</b><span data-i18n="stat.fresh">Fresh, never frozen</span></p>
+      </article>
+      <article class="st-ch">
+        <img class="st-inline" src="assets/img/story/by-the-water.webp" alt="" loading="lazy" decoding="async">
+        <h3 data-i18n="story.c3h">A table by the water</h3>
+        <p data-i18n="story.c3p">Take a seat on the promenade, order a cold Istrian beer and watch the sun go down over the Adriatic. Most guests stay longer than they planned.</p>
+        <p class="st-fact"><b>4.7&#9733;</b><span data-i18n="stat.google">Google rating</span></p>
+      </article>
     </div>
   </div>
 </section>
@@ -678,8 +739,13 @@
     'chip.sea':['Seafront','Direkt am Meer','Uz more','Sul mare'],
     'hero.cta':['Explore the Menu','Zur Speisekarte','Pogledaj jelovnik','Scopri il menù'],
     'story.h2':["Poreč's original burger bar",'Porečs erste Burger-Bar','Porečki originalni burger bar','Il burger bar originale di Parenzo'],
-    'story.p1':['It started with a simple idea on the Adriatic coast: a real burger, made by hand, served where the sea meets the sunset. Burgerija became the first burger bar in Poreč, and quickly the place locals and travellers return to, season after season.','Alles begann mit einer einfachen Idee an der Adriaküste: ein echter Burger, von Hand gemacht, serviert dort, wo das Meer auf den Sonnenuntergang trifft. Burgerija wurde die erste Burger-Bar in Poreč und schnell der Ort, zu dem Einheimische und Reisende Saison für Saison zurückkehren.','Sve je počelo jednostavnom idejom na jadranskoj obali: pravi burger, ručno napravljen, poslužen ondje gdje more susreće zalazak sunca. Burgerija je postala prvi burger bar u Poreču i brzo mjesto kojem se domaći i putnici vraćaju sezonu za sezonom.',"Tutto è iniziato con un'idea semplice sulla costa adriatica: un vero burger, fatto a mano, servito dove il mare incontra il tramonto. Burgerija è diventato il primo burger bar di Parenzo e presto il posto dove residenti e viaggiatori tornano, stagione dopo stagione."],
     'story.p2':['Everything is built fresh. Patties pressed by hand, buns baked daily, sauces made in-house, and ingredients sourced locally across Istria. Nothing frozen, nothing shortcut. Just fire, craft, and a table by the water.','Alles wird frisch zubereitet. Patties von Hand geformt, Brötchen täglich gebacken, Soßen hausgemacht und Zutaten aus ganz Istrien. Nichts gefroren, keine Abkürzungen. Nur Feuer, Handwerk und ein Tisch am Wasser.','Sve se radi svježe. Pljeskavice oblikovane ručno, peciva pečena svaki dan, umaci domaći, a namirnice iz cijele Istre. Ništa smrznuto, bez prečaca. Samo vatra, zanat i stol uz more.',"Tutto è preparato fresco. Hamburger pressati a mano, panini sfornati ogni giorno, salse fatte in casa e ingredienti da tutta l'Istria. Niente surgelato, nessuna scorciatoia. Solo fuoco, mestiere e un tavolo sull'acqua."],
+    'story.statement':['It started with a simple idea on the Adriatic coast: a real burger, *made by hand,* served where the sea meets the sunset.','Alles begann mit einer einfachen Idee an der Adriaküste: ein echter Burger, *von Hand gemacht,* serviert dort, wo das Meer den Sonnenuntergang trifft.','Sve je počelo jednostavnom idejom na jadranskoj obali: pravi burger, *ručno napravljen,* poslužen ondje gdje more susreće zalazak sunca.',"Tutto è iniziato con un'idea semplice sulla costa adriatica: un vero burger, *fatto a mano,* servito dove il mare incontra il tramonto."],
+    'story.c1h':['The first in Poreč','Die Ersten in Poreč','Prvi u Poreču','I primi a Parenzo'],
+    'story.c1p':["Burgerija opened as the town's first burger bar, right on the seafront promenade. Locals came first, then the travellers, and both keep coming back season after season.",'Burgerija eröffnete als erste Burger-Bar der Stadt, direkt an der Uferpromenade. Zuerst kamen die Einheimischen, dann die Reisenden, und beide kommen Saison für Saison wieder.','Burgerija je otvorena kao prvi burger bar u gradu, na samoj šetnici uz more. Prvo su došli domaći, zatim putnici, a jedni i drugi vraćaju se sezonu za sezonom.','Burgerija ha aperto come primo burger bar della città, proprio sul lungomare. Prima sono arrivati i residenti, poi i viaggiatori, e tornano tutti, stagione dopo stagione.'],
+    'story.c2h':['Made the slow way','Mit Zeit gemacht','Rađeno polako','Fatto con calma'],
+    'story.c3h':['A table by the water','Ein Tisch am Wasser','Stol uz more',"Un tavolo sull'acqua"],
+    'story.c3p':['Take a seat on the promenade, order a cold Istrian beer and watch the sun go down over the Adriatic. Most guests stay longer than they planned.','Nehmen Sie auf der Promenade Platz, bestellen Sie ein kühles istrisches Bier und sehen Sie zu, wie die Sonne über der Adria untergeht. Die meisten Gäste bleiben länger als geplant.','Sjednite na šetnici, naručite hladno istarsko pivo i gledajte kako sunce zalazi nad Jadranom. Većina gostiju ostane dulje nego što je planirala.',"Siediti sul lungomare, ordina una birra istriana fresca e guarda il sole tramontare sull'Adriatico. Quasi tutti restano più a lungo del previsto."],
     'stat.first':['First burger bar in Poreč','Erste Burger-Bar in Poreč','Prvi burger bar u Poreču','Primo burger bar a Parenzo'],
     'stat.google':['Google rating','Google-Bewertung','Ocjena na Googleu','Valutazione Google'],
     'stat.fresh':['Fresh, never frozen','Frisch, nie gefroren','Svježe, nikad smrznuto','Fresco, mai surgelato'],
@@ -866,6 +932,54 @@
     return 'en';
   }
   document.querySelectorAll('[data-lang]').forEach(b=>b.addEventListener('click',()=>{ if(b.dataset.lang!==lang) applyLang(b.dataset.lang,true); }));
+
+  // ================= STORY =================
+  (function(){
+    const stmt=document.getElementById('stStatement'), intro=document.getElementById('stIntro'),
+          list=document.getElementById('stList'), rail=document.getElementById('stRail');
+    const chs=[...list.querySelectorAll('.st-ch')], imgs=[...document.querySelectorAll('.st-img')];
+    const SDA=window.CSS&&CSS.supports&&CSS.supports('animation-timeline: view()');
+
+    // statement: one span per word; *starred* words turn ember and italic
+    function split(){
+      const raw=t('story.statement').split(' ');
+      let em=false; const n=raw.length;
+      stmt.innerHTML=raw.map((w,i)=>{
+        const open=w.startsWith('*'), close=w.endsWith('*') || w.endsWith('*,');
+        if(open) em=true;
+        const txt=w.replace(/\*/g,'').replace(/&/g,'&amp;');
+        const cls='w'+(em?' em':'');
+        if(close) em=false;
+        return '<span class="'+cls+'" style="--a:'+(i/(n-1)*27).toFixed(2)+'">'+txt+'</span>';
+      }).join(' ');
+      words=[...stmt.querySelectorAll('.w')];
+    }
+    let words=[];
+    langHooks.push(split);
+
+    // chapters: the one in the middle of the screen is lit; photos wipe up to match
+    const chIO=new IntersectionObserver(es=>es.forEach(e=>{
+      if(!e.isIntersecting) return;
+      const k=chs.indexOf(e.target);
+      chs.forEach((c,j)=>c.classList.toggle('on',j===k));
+      imgs.forEach((im,j)=>im.classList.toggle('on',j<=k));
+    }),{rootMargin:'-45% 0px -45% 0px'});
+    chs.forEach(c=>chIO.observe(c));
+
+    // browsers without scroll-driven animations: drive the same effects from scroll position
+    if(SDA || REDUCED) return;
+    let on=false;
+    const clamp=v=>Math.max(0,Math.min(1,v));
+    function frame(){
+      const vh=innerHeight;
+      const r=intro.getBoundingClientRect(), p=(vh-r.top)/(r.height+vh);
+      for(const w of words){ const a=parseFloat(w.style.getPropertyValue('--a')); w.style.opacity=(.16+.84*clamp((p*100-19-a)/5)).toFixed(3); }
+      const l=list.getBoundingClientRect(), q=(vh-l.top)/(l.height+vh);
+      rail.style.transform='scaleY('+clamp((q-.2)/.6).toFixed(4)+')';
+      if(on) requestAnimationFrame(frame);
+    }
+    new IntersectionObserver(es=>{ const was=on; on=es.some(e=>e.isIntersecting)||false; if(on&&!was) requestAnimationFrame(frame); },{rootMargin:'10% 0px'}).observe(document.getElementById('story'));
+  })();
 
   // circular seal around the fries photo
   langHooks.push(()=>{
